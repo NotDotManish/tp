@@ -2,8 +2,11 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.function.Predicate;
+
 import seedu.address.model.Model;
 import seedu.address.model.person.Client;
+import seedu.address.model.person.Person;
 
 /**
  * Lists all clients in the address book to the user.
@@ -21,7 +24,7 @@ public class ListClientsCommand extends Command {
 
     // TODO: Replace with a dedicated client list when Client model is fully
     // separated.
-    public static final java.util.function.Predicate<seedu.address.model.person.Person> PREDICATE_SHOW_ALL_CLIENTS = person -> person instanceof Client;
+    public static final Predicate<Person> PREDICATE_SHOW_ALL_CLIENTS = person -> person instanceof Client;
 
     @Override
     public CommandResult execute(Model model) {

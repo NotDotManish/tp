@@ -2,7 +2,10 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.function.Predicate;
+
 import seedu.address.model.Model;
+import seedu.address.model.person.Person;
 import seedu.address.model.person.Trainer;
 
 /**
@@ -21,7 +24,7 @@ public class ListTrainersCommand extends Command {
 
     // TODO: Replace with a dedicated trainer list when Trainer model is fully
     // separated.
-    public static final java.util.function.Predicate<seedu.address.model.person.Person> PREDICATE_SHOW_ALL_TRAINERS = person -> person instanceof Trainer;
+    public static final Predicate<Person> PREDICATE_SHOW_ALL_TRAINERS = person -> person instanceof Trainer;
 
     @Override
     public CommandResult execute(Model model) {
