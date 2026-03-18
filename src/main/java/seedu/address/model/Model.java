@@ -120,4 +120,7 @@ public interface Model {
 
     /** Returns the currently selected trainer (if any). */
     Optional<Trainer> getSelectedTrainer();
+
+    /** Returns true if the trainer list has an active search filter (not showing all trainers). */
+    boolean isTrainerListFiltered();
 }

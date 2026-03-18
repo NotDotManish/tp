@@ -55,6 +55,9 @@ public class MainWindow extends UiPart<Stage> {
     private Hyperlink clientFilterLink;
 
     @FXML
+    private Hyperlink trainerFilterLink;
+
+    @FXML
     private StackPane resultDisplayPlaceholder;
 
     @FXML
@@ -128,6 +131,7 @@ public class MainWindow extends UiPart<Stage> {
 
         trainerListPanel.setOnSelectedPersonChanged(this::handleSelectedTrainerChanged);
         updateClientFilterLinkText();
+        updateTrainerFilterLinkState();
 
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
@@ -190,6 +194,15 @@ public class MainWindow extends UiPart<Stage> {
         updateClientFilterLinkText();
     }
 
+    @FXML
+    private void handleListAllTrainers() {
+        try {
+            executeCommand("list-trainers");
+        } catch (CommandException | ParseException e) {
+            logger.info("Failed to list all trainers: " + e.getMessage());
+        }
+    }
+
     private void handleSelectedTrainerChanged(Person selectedPerson) {
         if (selectedPerson instanceof Trainer) {
             logic.setSelectedTrainer((Trainer) selectedPerson);
@@ -206,6 +219,12 @@ public class MainWindow extends UiPart<Stage> {
         clientFilterLink.setText(linkText);
     }
 
+    private void updateTrainerFilterLinkState() {
+        boolean filtered = logic.isTrainerListFiltered();
+        trainerFilterLink.setDisable(!filtered);
+        trainerFilterLink.setText(filtered ? "Show All Trainers" : "Showing All");
+    }
+
     /**
      * Executes the command and returns the result.
      *
@@ -218,6 +237,7 @@ public class MainWindow extends UiPart<Stage> {
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
 
             updateClientFilterLinkText();
+            updateTrainerFilterLinkState();
 
             if (commandResult.isShowHelp()) {
                 handleHelp();

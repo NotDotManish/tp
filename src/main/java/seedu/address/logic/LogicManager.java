@@ -99,6 +99,11 @@ public class LogicManager implements Logic {
     }
 
     @Override
+    public boolean isTrainerListFiltered() {
+        return model.isTrainerListFiltered();
+    }
+
+    @Override
     public Path getAddressBookFilePath() {
         return model.getAddressBookFilePath();
     }

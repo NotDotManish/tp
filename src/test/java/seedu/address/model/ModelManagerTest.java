@@ -223,6 +223,61 @@ public class ModelManagerTest {
     }
 
     @Test
+    public void isTrainerListFiltered_defaultState_returnsFalse() {
+        ModelManager model = new ModelManager();
+        assertFalse(model.isTrainerListFiltered());
+    }
+
+    @Test
+    public void isTrainerListFiltered_afterApplyingSearchPredicate_returnsTrue() {
+        AddressBook ab = new AddressBook();
+        Trainer trainerA = new Trainer(new Name("Alice Trainer"), new Phone("90000001"),
+                new Email("a@example.com"), Set.of());
+        Trainer trainerB = new Trainer(new Name("Bob Trainer"), new Phone("90000002"),
+                new Email("b@example.com"), Set.of());
+        ab.addPerson(trainerA);
+        ab.addPerson(trainerB);
+
+        ModelManager model = new ModelManager(ab, new UserPrefs());
+        assertFalse(model.isTrainerListFiltered());
+
+        model.updateFilteredTrainerList(new NameContainsKeywordsPredicate(Arrays.asList("Alice")));
+        assertTrue(model.isTrainerListFiltered());
+    }
+
+    @Test
+    public void isTrainerListFiltered_afterResettingToShowAll_returnsFalse() {
+        AddressBook ab = new AddressBook();
+        Trainer trainer = new Trainer(new Name("Alice Trainer"), new Phone("90000001"),
+                new Email("a@example.com"), Set.of());
+        ab.addPerson(trainer);
+
+        ModelManager model = new ModelManager(ab, new UserPrefs());
+        model.updateFilteredTrainerList(new NameContainsKeywordsPredicate(Arrays.asList("Alice")));
+        assertTrue(model.isTrainerListFiltered());
+
+        model.updateFilteredTrainerList(PREDICATE_SHOW_ALL_PERSONS);
+        assertFalse(model.isTrainerListFiltered());
+    }
+
+    @Test
+    public void isTrainerListFiltered_clientSearchDoesNotAffectTrainerFlag() {
+        AddressBook ab = new AddressBook();
+        Trainer trainer = new Trainer(new Name("Trainer"), new Phone("90000001"),
+                new Email("t@example.com"), Set.of());
+        Client client = new Client(new Name("Alice"), new Phone("80000001"),
+                trainer.getPhone(), trainer.getName(), new HashSet<>());
+        ab.addPerson(trainer);
+        ab.addPerson(client);
+
+        ModelManager model = new ModelManager(ab, new UserPrefs());
+        model.updateFilteredClientList(new NameContainsKeywordsPredicate(Arrays.asList("Alice")));
+
+        // Filtering clients does not set the trainer filter flag
+        assertFalse(model.isTrainerListFiltered());
+    }
+
+    @Test
     public void setPerson_editSelectedTrainerToClient_clearsSelectionAndShowsAllClients() {
         AddressBook ab = new AddressBook();
         Trainer trainer = new Trainer(new Name("Trainer"), new Phone("90000001"),

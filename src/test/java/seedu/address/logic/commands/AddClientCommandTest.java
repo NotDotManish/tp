@@ -241,6 +241,11 @@ public class AddClientCommandTest {
         public Optional<Trainer> getSelectedTrainer() {
             return Optional.empty();
         }
+
+        @Override
+        public boolean isTrainerListFiltered() {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     private static class ModelStubWithTrainerList extends ModelStub {

@@ -117,6 +117,27 @@ public class LogicManagerTest {
     }
 
     @Test
+    public void isTrainerListFiltered_delegatesToModel() throws Exception {
+        Trainer trainerA = (Trainer) new PersonBuilder().withName("Alice Smith").withPhone("91234567")
+                .withEmail("alice@example.com").withTags().build();
+        Trainer trainerB = (Trainer) new PersonBuilder().withName("Bob Jones").withPhone("98765432")
+                .withEmail("bob@example.com").withTags().build();
+        model.addPerson(trainerA);
+        model.addPerson(trainerB);
+
+        // Default: not filtered
+        assertEquals(false, logic.isTrainerListFiltered());
+
+        // After find-trainers: filtered
+        logic.execute("find-trainers Alice");
+        assertEquals(true, logic.isTrainerListFiltered());
+
+        // After list-trainers: not filtered
+        logic.execute("list-trainers");
+        assertEquals(false, logic.isTrainerListFiltered());
+    }
+
+    @Test
     public void accessorsAndSettings_delegatesToModel() {
         assertEquals(model.getAddressBook(), logic.getAddressBook());
         assertEquals(model.getAddressBookFilePath(), logic.getAddressBookFilePath());

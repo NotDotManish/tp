@@ -124,4 +124,9 @@ public class ModelStub implements Model {
     public Optional<Trainer> getSelectedTrainer() {
         throw new AssertionError("This method should not be called.");
     }
+
+    @Override
+    public boolean isTrainerListFiltered() {
+        throw new AssertionError("This method should not be called.");
+    }
 }
