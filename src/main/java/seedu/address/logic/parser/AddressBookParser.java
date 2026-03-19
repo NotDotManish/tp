@@ -24,6 +24,7 @@ import seedu.address.logic.commands.ListClientsCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.ListTrainersCommand;
 import seedu.address.logic.commands.LogCalorieIntakeCommand;
+import seedu.address.logic.commands.ReassignClientCommand;
 import seedu.address.logic.commands.RemarkCommand;
 import seedu.address.logic.commands.SetCalorieTargetCommand;
 import seedu.address.logic.commands.SetFocusCommand;
@@ -87,6 +88,9 @@ public class AddressBookParser {
 
         case SetFocusCommand.COMMAND_WORD:
             return new SetFocusCommandParser().parse(arguments);
+
+        case ReassignClientCommand.COMMAND_WORD:
+            return new ReassignClientCommandParser().parse(arguments);
 
         case RemarkCommand.COMMAND_WORD:
             return new RemarkCommandParser().parse(arguments);

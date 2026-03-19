@@ -189,9 +189,11 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private void handleClearSelectedTrainer() {
-        logic.clearSelectedTrainer();
-        trainerListPanel.clearSelection();
-        updateClientFilterLinkText();
+        try {
+            executeCommand("list-clients");
+        } catch (CommandException | ParseException e) {
+            logger.info("Failed to list all clients: " + e.getMessage());
+        }
     }
 
     @FXML

@@ -59,7 +59,7 @@
               <HBox alignment="CENTER_LEFT" spacing="10">
                 <Label text="Trainers" styleClass="label-bright" />
                 <Region HBox.hgrow="ALWAYS" />
-                <Hyperlink fx:id="trainerFilterLink" text="Showing All" disable="true" onAction="#handleListAllTrainers" />
+                <Hyperlink fx:id="trainerFilterLink" text="Showing All" disable="true" onAction="#handleListAllTrainers" styleClass="filter-link" />
               </HBox>
               <StackPane fx:id="trainerListPanelPlaceholder" VBox.vgrow="ALWAYS" />
             </VBox>
@@ -70,7 +70,7 @@
               <HBox alignment="CENTER_LEFT" spacing="10">
                 <Label text="Clients" styleClass="label-bright" />
                 <Region HBox.hgrow="ALWAYS" />
-                <Hyperlink fx:id="clientFilterLink" text="Showing All" onAction="#handleClearSelectedTrainer" />
+                <Hyperlink fx:id="clientFilterLink" text="Showing All" onAction="#handleClearSelectedTrainer" styleClass="filter-link" />
               </HBox>
               <StackPane fx:id="clientListPanelPlaceholder" VBox.vgrow="ALWAYS" />
             </VBox>

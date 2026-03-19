@@ -350,3 +350,34 @@
     -fx-background-radius: 2;
     -fx-font-size: 11;
 }
+
+.filter-link {
+    -fx-background-color: #3e7b91;
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+    -fx-underline: false;
+    -fx-padding: 2 8 2 8;
+    -fx-background-radius: 4;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 11px;
+}
+
+.filter-link:hover {
+    -fx-background-color: derive(#3e7b91, 25%);
+    -fx-text-fill: white;
+}
+
+.filter-link:pressed {
+    -fx-background-color: derive(#3e7b91, -15%);
+    -fx-text-fill: white;
+}
+
+.filter-link:visited {
+    -fx-text-fill: white;
+}
+
+.filter-link:disabled {
+    -fx-opacity: 0.4;
+    -fx-background-color: #3e7b91;
+    -fx-text-fill: white;
+}
