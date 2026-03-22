@@ -72,6 +72,93 @@ public class Client extends Person {
         this(name, phone, trainerPhone, trainerName, tags, 0, 0);
     }
 
+    private Client copyWith(
+            Phone trainerPhone,
+            Name trainerName,
+            int calorieTarget,
+            int calorieIntake,
+            Optional<WorkoutFocus> workoutFocus,
+            Optional<Remark> remark) {
+        return new Client(
+                getName(),
+                getPhone(),
+                trainerPhone,
+                trainerName,
+                getTags(),
+                calorieTarget,
+                calorieIntake,
+                workoutFocus,
+                remark);
+    }
+
+    /**
+     * Returns a copy of this client with an updated assigned trainer.
+     */
+    public Client withTrainer(Phone trainerPhone, Name trainerName) {
+        requireAllNonNull(trainerPhone, trainerName);
+        return copyWith(
+                trainerPhone,
+                trainerName,
+                calorieTarget,
+                calorieIntake,
+                workoutFocus,
+                remark);
+    }
+
+    /**
+     * Returns a copy of this client with an updated calorie target.
+     */
+    public Client withCalorieTarget(int calorieTarget) {
+        return copyWith(
+                trainerPhone,
+                trainerName,
+                calorieTarget,
+                calorieIntake,
+                workoutFocus,
+                remark);
+    }
+
+    /**
+     * Returns a copy of this client with an updated calorie intake.
+     */
+    public Client withCalorieIntake(int calorieIntake) {
+        return copyWith(
+                trainerPhone,
+                trainerName,
+                calorieTarget,
+                calorieIntake,
+                workoutFocus,
+                remark);
+    }
+
+    /**
+     * Returns a copy of this client with an updated workout focus.
+     */
+    public Client withWorkoutFocus(WorkoutFocus workoutFocus) {
+        requireAllNonNull(workoutFocus);
+        return copyWith(
+                trainerPhone,
+                trainerName,
+                calorieTarget,
+                calorieIntake,
+                Optional.of(workoutFocus),
+                remark);
+    }
+
+    /**
+     * Returns a copy of this client with an updated remark.
+     */
+    public Client withRemark(Remark remark) {
+        requireAllNonNull(remark);
+        return copyWith(
+                trainerPhone,
+                trainerName,
+                calorieTarget,
+                calorieIntake,
+                workoutFocus,
+                Optional.of(remark));
+    }
+
     /**
      * Returns the client's workout focus if one has been set.
      */

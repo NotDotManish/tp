@@ -154,7 +154,38 @@ public class ModelManager implements Model {
     public void setPerson(Person target, Person editedPerson) {
         requireAllNonNull(target, editedPerson);
 
+        Phone originalTrainerPhone = null;
+        Phone editedTrainerPhone = null;
+        Trainer editedTrainer = null;
+        boolean trainerPhoneChanged = false;
+        boolean trainerNameChanged = false;
+
+        if (target instanceof Trainer && editedPerson instanceof Trainer) {
+            Trainer originalTrainer = (Trainer) target;
+            editedTrainer = (Trainer) editedPerson;
+
+            originalTrainerPhone = originalTrainer.getPhone();
+            editedTrainerPhone = editedTrainer.getPhone();
+            trainerPhoneChanged = !originalTrainerPhone.equals(editedTrainerPhone);
+            trainerNameChanged = !originalTrainer.getName().equals(editedTrainer.getName());
+        }
+
         addressBook.setPerson(target, editedPerson);
+
+        if (editedTrainer != null && (trainerPhoneChanged || trainerNameChanged)) {
+            Phone originalPhone = originalTrainerPhone;
+            Phone editedPhone = editedTrainerPhone;
+            Trainer editedTrainerSnapshot = editedTrainer;
+
+            addressBook.getPersonList().stream()
+                    .filter(person -> person instanceof Client)
+                    .map(person -> (Client) person)
+                    .filter(client -> client.getTrainerPhone().equals(originalPhone))
+                    .toList()
+                    .forEach(client -> addressBook.setPerson(
+                            client,
+                            client.withTrainer(editedPhone, editedTrainerSnapshot.getName())));
+        }
 
         if (target instanceof Trainer && selectedTrainerPhone.isPresent()) {
             Phone selectedPhone = selectedTrainerPhone.get();

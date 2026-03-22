@@ -65,17 +65,7 @@ public class RemarkCommand extends Command {
         }
 
         Client clientToEdit = (Client) personAtIndex;
-        Client updatedClient = new Client(
-                clientToEdit.getName(),
-                clientToEdit.getPhone(),
-                clientToEdit.getTrainerPhone(),
-                clientToEdit.getTrainerName(),
-                clientToEdit.getTags(),
-                clientToEdit.getCalorieTarget(),
-                clientToEdit.getCalorieIntake(),
-                clientToEdit.getWorkoutFocus(),
-                java.util.Optional.of(remark)
-        );
+        Client updatedClient = clientToEdit.withRemark(remark);
 
         model.setPerson(clientToEdit, updatedClient);
         return new CommandResult(

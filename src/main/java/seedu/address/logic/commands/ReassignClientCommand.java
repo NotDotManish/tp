@@ -75,17 +75,7 @@ public class ReassignClientCommand extends Command {
         Client clientToReassign = (Client) personAtClientIndex;
         Trainer newTrainer = (Trainer) personAtTrainerIndex;
 
-        Client updatedClient = new Client(
-                clientToReassign.getName(),
-                clientToReassign.getPhone(),
-                newTrainer.getPhone(),
-                newTrainer.getName(),
-                clientToReassign.getTags(),
-                clientToReassign.getCalorieTarget(),
-                clientToReassign.getCalorieIntake(),
-                clientToReassign.getWorkoutFocus(),
-                clientToReassign.getRemark()
-        );
+        Client updatedClient = clientToReassign.withTrainer(newTrainer.getPhone(), newTrainer.getName());
 
         model.setPerson(clientToReassign, updatedClient);
         return new CommandResult(

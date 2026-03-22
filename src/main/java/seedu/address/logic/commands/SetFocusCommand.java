@@ -66,17 +66,7 @@ public class SetFocusCommand extends Command {
         }
 
         Client clientToEdit = (Client) personAtIndex;
-        Client updatedClient = new Client(
-                clientToEdit.getName(),
-                clientToEdit.getPhone(),
-                clientToEdit.getTrainerPhone(),
-                clientToEdit.getTrainerName(),
-                clientToEdit.getTags(),
-                clientToEdit.getCalorieTarget(),
-                clientToEdit.getCalorieIntake(),
-                java.util.Optional.of(workoutFocus),
-                clientToEdit.getRemark()
-        );
+        Client updatedClient = clientToEdit.withWorkoutFocus(workoutFocus);
 
         model.setPerson(clientToEdit, updatedClient);
         return new CommandResult(

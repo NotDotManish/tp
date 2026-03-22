@@ -67,17 +67,7 @@ public class LogCalorieIntakeCommand extends Command {
 
         Client clientToEdit = (Client) personAtIndex;
         int newIntake = clientToEdit.getCalorieIntake() + calories;
-        Client updatedClient = new Client(
-                clientToEdit.getName(),
-                clientToEdit.getPhone(),
-                clientToEdit.getTrainerPhone(),
-                clientToEdit.getTrainerName(),
-                clientToEdit.getTags(),
-                clientToEdit.getCalorieTarget(),
-                newIntake,
-                clientToEdit.getWorkoutFocus(),
-                clientToEdit.getRemark()
-        );
+        Client updatedClient = clientToEdit.withCalorieIntake(newIntake);
 
         model.setPerson(clientToEdit, updatedClient);
         return new CommandResult(String.format(MESSAGE_LOG_CALORIE_SUCCESS,

@@ -219,7 +219,10 @@ public class ModelManagerTest {
         model.setPerson(trainer, editedTrainer);
 
         assertEquals(Optional.of(editedTrainer), model.getSelectedTrainer());
-        assertEquals(0, model.getFilteredClientList().size());
+        assertEquals(1, model.getFilteredClientList().size());
+        Client updatedClient = (Client) model.getFilteredClientList().get(0);
+        assertEquals(editedTrainer.getPhone(), updatedClient.getTrainerPhone());
+        assertEquals(editedTrainer.getName(), updatedClient.getTrainerName());
     }
 
     @Test
