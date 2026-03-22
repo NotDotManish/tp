@@ -53,6 +53,9 @@ The bulk of the app's work is done by the following four components:
 
 The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
 
+<div markdown="span" class="alert alert-info">:information_source: **Note:** GymOps uses list-scoped delete commands (e.g., `delete t/1` to delete a trainer or `delete c/1` to delete a client). The diagrams in this section use the AddressBook-Level3 style `delete 1` example to illustrate the component interactions.
+</div>
+
 <img src="images/ArchitectureSequenceDiagram.png" width="574" />
 
 Each of the four main components (also shown in the diagram above),
@@ -92,6 +95,9 @@ Here's a (partial) class diagram of the `Logic` component:
 <img src="images/LogicClassDiagram.png" width="550"/>
 
 The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** In GymOps, the equivalent user command would be `delete t/1` or `delete c/1`.
+</div>
 
 ![Interactions Inside the Logic Component for the `delete 1` Command](images/DeleteSequenceDiagram.png)
 
@@ -155,20 +161,139 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### Client workout focus and remarks
+### Client attributes
 
-GymOps tracks two client-only fields:
+GymOps extends the base `Person` model with a `Client` subtype that includes client-specific attributes.
 
+Client-specific attributes include:
+
+* **Assigned trainer**: stored as the trainer's phone and name fields in `Client`.
+* **Calorie tracking**: `calorieTarget` (0 means not set) and `calorieIntake`.
 * **Workout focus**: a short, letters-only string (e.g., `Chest`), stored as a `WorkoutFocus` value object.
 * **Remark**: free-text operational notes (must be non-empty after trimming), stored as a `Remark` value object.
 
-These values are stored in the `Client` model as optional fields and are persisted through `JsonAdaptedPerson`.
+These values are stored in the `Client` model and are persisted through `JsonAdaptedPerson`.
 
-**Command flow**:
+#### Implementation
 
-* `set-focus` is handled by `SetFocusCommandParser` and `SetFocusCommand`.
-* `remark` is handled by `RemarkCommandParser` and `RemarkCommand`.
-* Both commands resolve the target client using the index from the current `Model#getFilteredClientList()`.
+At the model layer, `Client` is a `Person` subtype with additional client-only fields:
+
+* **Assigned trainer**: stored as `trainerPhone` and `trainerName` fields.
+* **Calorie tracking**: `calorieTarget` and `calorieIntake` are stored as integers, where `0` means “not set” for `calorieTarget`.
+* **Workout focus**: stored as an `Optional<WorkoutFocus>`.
+* **Remark**: stored as an `Optional<Remark>`.
+
+`WorkoutFocus` and `Remark` are value objects that encapsulate validation:
+
+* `WorkoutFocus` only allows letters (`[A-Za-z]+`).
+* `Remark` must be non-empty after trimming.
+
+To keep `Client` immutable, each client-only update is implemented using a copy-with style API:
+
+* `Client#withTrainer(...)`
+* `Client#withCalorieTarget(...)`
+* `Client#withCalorieIntake(...)`
+* `Client#withWorkoutFocus(...)`
+* `Client#withRemark(...)`
+
+All client-attribute commands follow the same high-level pattern:
+
+1. Resolve the target client from the current `Model#getFilteredClientList()` using the user-provided index.
+2. Create an updated `Client` instance using one of the `withX(...)` methods.
+3. Replace the old instance via `Model#setPerson(oldClient, updatedClient)`.
+4. Persist the updated address book through `Storage` (triggered by `LogicManager`).
+
+Storage is implemented through `JsonAdaptedPerson`, which serialises/deserialises all client-only fields.
+For optional fields (`workoutFocus`, `remark`), `null` is stored when absent and mapped back to `Optional.empty()` on load.
+`JsonAdaptedPerson` also includes a small backward-compatibility fallback that infers the person type when `type` is missing.
+
+#### Command Flow
+
+The following sequence occurs when executing `set-focus c/1 f/Chest`:
+
+1. The supervisor enters `set-focus c/1 f/Chest`.
+2. `AddressBookParser` identifies the command word `set-focus`.
+3. `SetFocusCommandParser` parses the client index (`c/`) and focus value (`f/`).
+4. A `SetFocusCommand` object is created.
+5. `LogicManager` executes the command.
+6. The command retrieves the client from the filtered client list.
+7. `Client#withWorkoutFocus(...)` is called to create an updated `Client`.
+8. `Model#setPerson(...)` replaces the old client with the updated client.
+9. `LogicManager` saves the updated address book via `Storage#saveAddressBook(...)`.
+10. The UI updates because it observes the model’s filtered lists.
+
+The sequence diagram below shows a typical execution flow for `set-focus c/1 f/Chest`:
+
+<img src="images/client-attributes/SetFocusSequenceDiagram.png" width="700" />
+
+Other client attribute commands follow the same flow, with small differences:
+
+* `remark INDEX r/REMARK` updates `Client#remark`.
+* `set-calorie-target INDEX cal/CALORIES` updates `Client#calorieTarget`.
+* `log-calorie INDEX cal/CALORIES` adds to `Client#calorieIntake` rather than overwriting it.
+* `reassign-client CLIENT_INDEX t/TRAINER_INDEX` reads both the filtered client list and filtered trainer list and updates `trainerPhone` + `trainerName`.
+
+#### Filtering Behaviour
+
+All client-attribute commands resolve the target client based on the **currently displayed client list** (`Model#getFilteredClientList()`).
+As a result, the same client can have different indices depending on:
+
+* whether a trainer is currently selected (client list filtering), and
+* whether the user has applied `find-clients`.
+
+For `reassign-client`, the `CLIENT_INDEX` is resolved from the displayed client list and the `t/TRAINER_INDEX` is resolved from the displayed trainer list.
+
+#### Error Handling
+
+GymOps defends at both parsing and execution layers:
+
+* Invalid formats (missing prefixes/arguments) are rejected by the relevant `XYZCommandParser` with a `ParseException`.
+* Invalid attribute values are rejected by their value objects (e.g., `WorkoutFocus` rejects non-letter input; `Remark` rejects blank remarks).
+* Invalid indices (out of bounds, or pointing at a non-client in the client list) cause the command to throw a `CommandException`.
+
+#### Usage Scenario
+
+Given below is an example scenario showing how client attributes are updated over time.
+
+Step 1. The supervisor lists clients using `list-clients` (or narrows down to a smaller set using `find-clients`).
+
+Step 2. The supervisor sets the workout focus for the first client using `set-focus c/1 f/Chest`.
+GymOps updates the client’s workout focus, persists the change, and the UI updates to show the focus label on that client’s card.
+
+Step 3. The supervisor records an operational note using `remark 1 r/Recovering from ACL surgery`.
+GymOps overwrites any existing remark and updates the client card.
+
+Step 4. The supervisor sets a daily calorie target using `set-calorie-target 1 cal/2000`.
+GymOps updates the target and persists the change.
+
+Step 5. The supervisor logs calorie intake throughout the day using `log-calorie 1 cal/500`.
+GymOps adds the new amount to the existing intake total (note: the current version does not automatically reset intake totals by date).
+
+#### Design Considerations
+
+**Aspect: Representation of optional client-only fields**
+
+* **Option 1 (current choice):** Store workout focus and remark as `Optional<...>`.
+   * Pros: Expresses “absent vs present” explicitly and avoids sentinel values.
+   * Cons: Slightly more boilerplate at the storage and UI layers.
+* **Option 2:** Store empty strings when not set.
+   * Pros: Simpler serialisation.
+   * Cons: Blurs “unset” vs “set to empty”, and makes validation/formatting harder.
+
+**Aspect: Representation of calorie target**
+
+* **Option 1 (current choice):** Use `int calorieTarget` where `0` means “not set”.
+   * Pros: Lightweight and easy to display without null-handling.
+   * Cons: Overloads the meaning of `0` (cannot represent a literal target of 0).
+* **Option 2:** Use `OptionalInt` for calorie target.
+   * Pros: More semantically precise.
+   * Cons: Adds complexity to parsing, serialisation, and UI formatting.
+
+#### Future Improvements
+
+* Reset calorie intake totals by date (e.g., auto-reset at midnight, or store intake logs with timestamps).
+* Unify index conventions for client-attribute commands (some commands use `c/INDEX` while others use a plain `INDEX`).
+* Consider using a trainer identifier reference (instead of duplicating trainer name + phone) if trainer details become editable.
 
 **UI**:
 
@@ -270,7 +395,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 **Aspect: How undo & redo executes:**
 
-* **Alternative 1 (current choice):** Saves the entire address book.
+* **Alternative 1 (proposed):** Saves the entire address book.
   * Pros: Easy to implement.
   * Cons: May have performance issues in terms of memory usage.
 
@@ -279,11 +404,11 @@ The following activity diagram summarizes what happens when a user executes a ne
   * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
   * Cons: We must ensure that the implementation of each individual command are correct.
 
-_{more aspects and alternatives to be added}_
-
 ### \[Proposed\] Data archiving
 
-_{Explain here how the data archiving feature will be implemented}_
+GymOps does not currently support archiving trainers/clients.
+
+If this feature is added, a minimal approach is to represent an archived entity using a boolean flag (e.g., `archived`) and filter archived entries out of the default trainer/client lists. Commands such as `archive t/INDEX`, `archive c/INDEX`, `restore t/INDEX`, and `restore c/INDEX` can be added to toggle the flag.
 
 
 --------------------------------------------------------------------------------------------------------------------
@@ -379,9 +504,7 @@ Some user stories describe planned/proposed features that may not be implemented
       Use case resumes at step 2.
 
 
-**Use case: \[Proposed\] Reassign a client to another trainer**
-
-_This is a proposed feature and is not implemented in the current version._
+**Use case: Reassign a client to another trainer**
 
 **MSS**
 
@@ -389,7 +512,7 @@ _This is a proposed feature and is not implemented in the current version._
 2.  GymOps shows a list of clients with index numbers.
 3.  Supervisor requests to list trainers.
 4.  GymOps shows a list of trainers with index numbers.
-5.  Supervisor issues the command to reassign a client index to a new trainer index.
+5.  Supervisor issues the command to reassign a client to a new trainer (e.g., `reassign-client 2 t/1`).
 6.  GymOps validates the input and updates the client’s assigned trainer.
 
    Use case ends.
@@ -411,12 +534,6 @@ _This is a proposed feature and is not implemented in the current version._
 * 5b. The trainer index is invalid.
 
    * 5b1. GymOps shows an error message.
-
-      Use case resumes at step 4.
-
-* 6a. The client is already assigned to the specified trainer.
-
-   * 6a1. GymOps rejects the command and shows an error message.
 
       Use case resumes at step 4.
 
@@ -522,7 +639,7 @@ testers are expected to do more *exploratory* testing.
 
    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   1. Double-click the jar file Expected: Shows the GUI with a set of sample trainers and clients. The window size may not be optimum.
 
 1. Saving window preferences
 
@@ -531,43 +648,63 @@ testers are expected to do more *exploratory* testing.
    1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
+   1. Additional test ideas (optional):
+      * Launch the app from command line using different working directories.
+      * Verify that closing the app does not create error dialogs.
 
-### Deleting a person
+### Deleting a trainer/client
 
-1. Deleting a person while all persons are being shown
+1. Deleting a trainer or client while the corresponding list is being shown
 
-   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+   1. Prerequisites: List entries using `list-trainers` and/or `list-clients`. Ensure there are multiple entries in the list.
 
-   1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+   1. Test case: `delete t/1`<br>
+      Expected: Trainer at index 1 is deleted from the trainer list. Details of the deleted trainer shown in the status message.
 
-   1. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+   1. Test case: `delete c/1`<br>
+      Expected: Client at index 1 is deleted from the client list. Details of the deleted client shown in the status message.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+   1. Test case: `delete t/1` (where trainer at index 1 still has active clients)<br>
+      Expected: Trainer is not deleted. Error shown: `Cannot delete trainer: they still have active clients.`
+
+   1. Test case: `delete t/0`<br>
+      Expected: No entry is deleted. Error details shown in the status message.
+
+   1. Other incorrect delete commands to try: `delete`, `delete x`, `delete t/x`, `delete c/x`, `delete t/999` (where the index is larger than the list size)<br>
       Expected: Similar to previous.
 
-1. _{ more test cases …​ }_
+1. Additional test ideas (optional):
+   * Delete a client after filtering the client list (e.g., after `find-clients ...`).
+   * Delete a trainer after filtering the trainer list (e.g., after `find-trainers ...`).
 
-### Finding persons
+### Finding trainers/clients
 
-1. Finding persons by name
+1. Finding trainers by name
 
-   1. Prerequisites: List all persons using the `list` command.
+   1. Prerequisites: List all trainers using `list-trainers`.
 
-   1. Test case: `find alex david`<br>
-      Expected: Only persons whose names contain `alex` or `david` are shown.
+   1. Test case: `find-trainers alex david`<br>
+      Expected: Only trainers whose names contain `alex` or `david` are shown.
 
-   1. Test case: `find Bob@`<br>
+   1. Test case: `find-trainers Bob@`<br>
       Expected: Error shown: `Keywords must be alphanumeric.`
 
-1. Returning to full list
+1. Finding clients by name
 
-   1. Prerequisites: Run any successful `find` command.
+   1. Prerequisites: List all clients using `list-clients`.
 
-   1. Test case: `list`<br>
-      Expected: All persons are shown again.
+   1. Test case: `find-clients alex david`<br>
+      Expected: Only clients whose names contain `alex` or `david` are shown.
+
+1. Returning to full trainer/client list
+
+   1. Prerequisites: Run any successful `find-trainers` or `find-clients` command.
+
+   1. Test case: `list-trainers` (after `find-trainers`) or `list-clients` (after `find-clients`)<br>
+      Expected: All trainers/clients are shown again.
+
+   1. Test case: `list-trainers` (after `find-trainers`) or `list-clients` (after `find-clients`)<br>
+      Expected: All trainers/clients are shown again.
 
 ### Setting workout focus
 
@@ -597,6 +734,19 @@ testers are expected to do more *exploratory* testing.
 
 1. Dealing with missing/corrupted data files
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+   1. Missing file
 
-1. _{ more test cases …​ }_
+      1. Prerequisites: Close the app.
+      1. Delete the data file at `data/addressbook.json`.
+      1. Launch the app.
+         Expected: App starts normally and the data file is re-created with sample trainers/clients.
+
+   1. Corrupted file
+
+      1. Prerequisites: Close the app.
+      1. Open `data/addressbook.json` and replace the contents with invalid JSON (e.g., `{`).
+      1. Launch the app.
+         Expected: App starts normally with an empty address book.
+
+1. Additional test ideas (optional):
+   * Verify that data persists after adding/editing/deleting trainers/clients and restarting the app.
