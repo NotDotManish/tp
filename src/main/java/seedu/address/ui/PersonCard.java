@@ -2,6 +2,7 @@ package seedu.address.ui;
 
 import java.util.Comparator;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
@@ -43,6 +44,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label email;
     @FXML
+    private Label clientCount;
+    @FXML
     private Label assignedTrainer;
     @FXML
     private Label calorieInfo;
@@ -57,7 +60,7 @@ public class PersonCard extends UiPart<Region> {
      * Creates a {@code PersonCard} with the given {@code Person} and index to
      * display.
      */
-    public PersonCard(Person person, int displayedIndex) {
+    public PersonCard(Person person, int displayedIndex, ObservableList<Person> allPersons) {
         super(FXML);
         this.person = person;
         id.setText(displayedIndex + ". ");
@@ -67,12 +70,17 @@ public class PersonCard extends UiPart<Region> {
                 .sorted(Comparator.comparing(Tag::getTagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.getTagName())));
 
+        role.setManaged(false);
+        role.setVisible(false);
+
         if (person instanceof Trainer) {
             Trainer trainer = (Trainer) person;
-            role.setText("Role: Trainer");
-            email.setText("Email: " + trainer.getEmail().getValue());
+            email.setText(trainer.getEmail().getValue());
             email.setManaged(true);
             email.setVisible(true);
+
+            setClientCountLabel(trainer, allPersons);
+
             assignedTrainer.setManaged(false);
             assignedTrainer.setVisible(false);
             calorieInfo.setManaged(false);
@@ -83,12 +91,15 @@ public class PersonCard extends UiPart<Region> {
             remark.setVisible(false);
         } else if (person instanceof Client) {
             Client client = (Client) person;
-            role.setText("Role: Client");
-            assignedTrainer.setText("Assigned to Trainer: " + client.getTrainerName().getFullName());
+            assignedTrainer.setText("Trainer: " + client.getTrainerName().getFullName());
             assignedTrainer.setManaged(true);
             assignedTrainer.setVisible(true);
             email.setManaged(false);
             email.setVisible(false);
+
+            clientCount.setManaged(false);
+            clientCount.setVisible(false);
+
             setCalorieInfoLabel(client);
             setWorkoutFocusLabel(client);
             setRemarkLabel(client);
@@ -119,6 +130,17 @@ public class PersonCard extends UiPart<Region> {
             remark.setManaged(false);
             remark.setVisible(false);
         }
+    }
+
+    private void setClientCountLabel(Trainer trainer, ObservableList<Person> allPersons) {
+        long count = allPersons.stream()
+                .filter(p -> p instanceof Client)
+                .map(p -> (Client) p)
+                .filter(c -> c.getTrainerPhone().equals(trainer.getPhone()))
+                .count();
+        clientCount.setText(count + " clients");
+        clientCount.setManaged(true);
+        clientCount.setVisible(true);
     }
 
     /**

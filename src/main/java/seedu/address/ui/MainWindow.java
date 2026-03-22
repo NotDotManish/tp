@@ -125,10 +125,10 @@ public class MainWindow extends UiPart<Stage> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
-        trainerListPanel = new PersonListPanel(logic.getFilteredTrainerList());
+        trainerListPanel = new PersonListPanel(logic.getFilteredTrainerList(), logic.getAddressBook().getPersonList());
         trainerListPanelPlaceholder.getChildren().add(trainerListPanel.getRoot());
 
-        clientListPanel = new PersonListPanel(logic.getFilteredClientList());
+        clientListPanel = new PersonListPanel(logic.getFilteredClientList(), logic.getAddressBook().getPersonList());
         clientListPanelPlaceholder.getChildren().add(clientListPanel.getRoot());
 
         trainerListPanel.setOnSelectedPersonChanged(this::handleSelectedTrainerChanged);
@@ -218,8 +218,8 @@ public class MainWindow extends UiPart<Stage> {
 
     private void updateClientFilterLinkText() {
         String linkText = logic.getSelectedTrainer()
-                .map(trainer -> "Showing: " + trainer.getName().getFullName())
-                .orElse("Showing All");
+            .map(trainer -> "Showing: " + trainer.getName().getFullName())
+            .orElseGet(() -> logic.isClientListFiltered() ? "Showing: Filtered" : "Showing All");
         clientFilterLink.setText(linkText);
     }
 

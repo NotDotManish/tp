@@ -217,6 +217,11 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public boolean isClientListFiltered() {
+        return clientListPredicate != PREDICATE_SHOW_ALL_PERSONS;
+    }
+
+    @Override
     public Optional<Trainer> getSelectedTrainer() {
         if (selectedTrainerPhone.isEmpty()) {
             return Optional.empty();
