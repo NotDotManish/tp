@@ -34,6 +34,7 @@ This guide is written for **gym managers and administrators** who want a fast, k
   - [Viewing help](#viewing-help-help)
   - [Adding a trainer](#adding-a-trainer-add-trainer)
   - [Adding a client](#adding-a-client-add-client)
+  - [Reassigning a client](#reassigning-a-client-reassign-client)
   - [Listing all persons](#listing-all-persons-list)
   - [Listing all trainers](#listing-all-trainers-list-trainers)
   - [Listing all clients](#listing-all-clients-list-clients)
@@ -148,6 +149,22 @@ Format: `add-client n/NAME p/PHONE_NUMBER t/TRAINER_INDEX`
 
 Examples:
 * `add-client n/Alice Lim p/81234567 t/1` — adds Alice Lim and assigns her to the 1st trainer in the list.
+
+---
+
+### Reassigning a client: `reassign-client`
+
+Reassigns an existing client to a different trainer. All client data (calorie target, intake, workout focus, remark) is preserved.
+
+Format: `reassign-client CLIENT_INDEX t/TRAINER_INDEX`
+
+* `CLIENT_INDEX` must refer to a client in the **client list**.
+* `TRAINER_INDEX` must refer to a trainer visible in the **current trainer list**.
+
+<div markdown="span" class="alert alert-warning">:exclamation: **Caution:** If either list is filtered, indexes refer to the filtered results. Run `list` first to reassign using the full lists.</div>
+
+Examples:
+* `reassign-client 2 t/1` — reassigns the 2nd client to the 1st trainer.
 
 ---
 
@@ -402,6 +419,7 @@ Install GymOps on the other computer and replace the empty data file it creates 
 | **Help** | `help` | — |
 | **Add trainer** | `add-trainer n/NAME p/PHONE_NUMBER e/EMAIL` | `add-trainer n/John Doe p/98765432 e/johndoe@example.com` |
 | **Add client** | `add-client n/NAME p/PHONE_NUMBER t/TRAINER_INDEX` | `add-client n/Alice Lim p/81234567 t/1` |
+| **Reassign client** | `reassign-client CLIENT_INDEX t/TRAINER_INDEX` | `reassign-client 2 t/1` |
 | **List all** | `list` | — |
 | **List trainers** | `list-trainers` | — |
 | **List clients** | `list-clients` | — |
