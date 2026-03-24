@@ -104,6 +104,11 @@ public class LogicManager implements Logic {
     }
 
     @Override
+    public boolean isClientListFiltered() {
+        return model.isClientListFiltered();
+    }
+
+    @Override
     public Path getAddressBookFilePath() {
         return model.getAddressBookFilePath();
     }

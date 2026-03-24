@@ -246,6 +246,11 @@ public class AddClientCommandTest {
         public boolean isTrainerListFiltered() {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public boolean isClientListFiltered() {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     private static class ModelStubWithTrainerList extends ModelStub {

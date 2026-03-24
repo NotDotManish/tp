@@ -3,6 +3,7 @@ package seedu.address.ui;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
@@ -23,13 +24,20 @@ public class PersonListPanel extends UiPart<Region> {
 
     private Consumer<Person> onSelectedPersonChanged;
 
+    private final ObservableList<Person> allPersons;
+
     /**
      * Creates a {@code PersonListPanel} with the given {@code ObservableList}.
      */
-    public PersonListPanel(ObservableList<Person> personList) {
+    public PersonListPanel(ObservableList<Person> personList, ObservableList<Person> allPersons) {
         super(FXML);
+        this.allPersons = allPersons;
         personListView.setItems(personList);
         personListView.setCellFactory(listView -> new PersonListViewCell());
+
+        // Trainer cards show derived fields (client count) based on the full address book list.
+        // Refresh the visible list when the underlying list changes (e.g. client added/reassigned).
+        this.allPersons.addListener((ListChangeListener<Person>) change -> personListView.refresh());
 
         personListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (onSelectedPersonChanged != null) {
@@ -60,7 +68,7 @@ public class PersonListPanel extends UiPart<Region> {
                 setGraphic(null);
                 setText(null);
             } else {
-                setGraphic(new PersonCard(person, getIndex() + 1).getRoot());
+                setGraphic(new PersonCard(person, getIndex() + 1, allPersons).getRoot());
             }
         }
     }
