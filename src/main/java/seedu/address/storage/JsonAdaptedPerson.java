@@ -18,6 +18,7 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
 import seedu.address.model.person.Trainer;
+import seedu.address.model.person.Validity;
 import seedu.address.model.person.WorkoutFocus;
 import seedu.address.model.tag.Tag;
 
@@ -39,6 +40,7 @@ class JsonAdaptedPerson {
     private final int calorieIntake;
     private final String workoutFocus;
     private final String remark;
+    private final String validity;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
     /**
@@ -52,6 +54,7 @@ class JsonAdaptedPerson {
             @JsonProperty("calorieIntake") int calorieIntake,
             @JsonProperty("workoutFocus") String workoutFocus,
             @JsonProperty("remark") String remark,
+            @JsonProperty("validity") String validity,
             @JsonProperty("tags") List<JsonAdaptedTag> tags) {
         this.type = type;
         this.name = name;
@@ -63,6 +66,7 @@ class JsonAdaptedPerson {
         this.calorieIntake = calorieIntake;
         this.workoutFocus = workoutFocus;
         this.remark = remark;
+        this.validity = validity;
         if (tags != null) {
             this.tags.addAll(tags);
         }
@@ -83,6 +87,7 @@ class JsonAdaptedPerson {
             calorieIntake = 0;
             workoutFocus = null;
             remark = null;
+            validity = null;
         } else if (source instanceof Client) {
             Client client = (Client) source;
             type = "client";
@@ -97,6 +102,9 @@ class JsonAdaptedPerson {
             remark = client.getRemark()
                     .map(Remark::getValue)
                     .orElse(null);
+            validity = client.getValidity()
+                    .map(Validity::toString)
+                    .orElse(null);
         } else {
             type = "unknown";
             email = null;
@@ -106,6 +114,7 @@ class JsonAdaptedPerson {
             calorieIntake = 0;
             workoutFocus = null;
             remark = null;
+            validity = null;
         }
 
         tags.addAll(source.getTags().stream()
@@ -191,9 +200,10 @@ class JsonAdaptedPerson {
         Name modelTrainerName = toModelTrainerName();
         Optional<WorkoutFocus> modelFocus = toModelWorkoutFocus();
         Optional<Remark> modelRemark = toModelRemark();
+        Optional<Validity> modelValidity = toModelValidity();
 
         return new Client(modelName, modelPhone, modelTrainerPhone, modelTrainerName, modelTags,
-                calorieTarget, calorieIntake, modelFocus, modelRemark);
+                calorieTarget, calorieIntake, modelFocus, modelRemark, modelValidity);
     }
 
     private Phone toModelTrainerPhone() throws IllegalValueException {
@@ -234,6 +244,16 @@ class JsonAdaptedPerson {
             throw new IllegalValueException(Remark.MESSAGE_CONSTRAINTS);
         }
         return Optional.of(new Remark(remark));
+    }
+
+    private Optional<Validity> toModelValidity() throws IllegalValueException {
+        if (validity == null) {
+            return Optional.empty();
+        }
+        if (!Validity.isValidValidity(validity)) {
+            throw new IllegalValueException(Validity.MESSAGE_CONSTRAINTS);
+        }
+        return Optional.of(new Validity(validity));
     }
 
 }

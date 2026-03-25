@@ -14,6 +14,8 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.AddClientCommand;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Validity;
+import java.util.Optional;
 
 public class AddClientCommandParserTest {
 
@@ -24,6 +26,13 @@ public class AddClientCommandParserTest {
         AddClientCommand expectedCommand = new AddClientCommand(new Name("Amy Bee"), new Phone("11111111"),
                 Index.fromOneBased(1));
         assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY + " " + PREFIX_TRAINER + "1", expectedCommand);
+    }
+
+    @Test
+    public void parse_allFieldsPresentWithValidity_success() {
+        AddClientCommand expectedCommand = new AddClientCommand(new Name("Amy Bee"), new Phone("11111111"),
+                Index.fromOneBased(1), Optional.of(new Validity("2026-12-31")));
+        assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY + " " + PREFIX_TRAINER + "1 v/2026-12-31", expectedCommand);
     }
 
     @Test

@@ -4,6 +4,7 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TRAINER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_VALIDITY;
 
 import java.util.stream.Stream;
 
@@ -12,6 +13,8 @@ import seedu.address.logic.commands.AddClientCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Validity;
+import java.util.Optional;
 
 /**
  * Parses input arguments and creates a new AddClientCommand object
@@ -25,7 +28,7 @@ public class AddClientCommandParser implements Parser<AddClientCommand> {
      */
     public AddClientCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_TRAINER);
+                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_TRAINER, PREFIX_VALIDITY);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_PHONE, PREFIX_TRAINER)
                 || !argMultimap.getPreamble().isEmpty()) {
@@ -36,7 +39,12 @@ public class AddClientCommandParser implements Parser<AddClientCommand> {
         Phone phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
         Index trainerIndex = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_TRAINER).get());
 
-        return new AddClientCommand(name, phone, trainerIndex);
+        Optional<Validity> validity = Optional.empty();
+        if (argMultimap.getValue(PREFIX_VALIDITY).isPresent()) {
+            validity = Optional.of(ParserUtil.parseValidity(argMultimap.getValue(PREFIX_VALIDITY).get()));
+        }
+
+        return new AddClientCommand(name, phone, trainerIndex, validity);
     }
 
     /**

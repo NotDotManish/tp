@@ -56,6 +56,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label remark;
     @FXML
+    private Label validity;
+    @FXML
     private FlowPane tags;
 
     /**
@@ -93,6 +95,8 @@ public class PersonCard extends UiPart<Region> {
             workoutFocus.setVisible(false);
             remark.setManaged(false);
             remark.setVisible(false);
+            validity.setManaged(false);
+            validity.setVisible(false);
         } else if (person instanceof Client) {
             Client client = (Client) person;
             personIcon.setText("👤");
@@ -109,6 +113,7 @@ public class PersonCard extends UiPart<Region> {
             setCalorieInfoLabel(client);
             setWorkoutFocusLabel(client);
             setRemarkLabel(client);
+            setValidityLabel(client);
         }
     }
 
@@ -135,6 +140,17 @@ public class PersonCard extends UiPart<Region> {
         } else {
             remark.setManaged(false);
             remark.setVisible(false);
+        }
+    }
+
+    private void setValidityLabel(Client client) {
+        if (client.getValidity().isPresent()) {
+            validity.setText("Membership valid till: " + client.getValidity().get().toString());
+            validity.setManaged(true);
+            validity.setVisible(true);
+        } else {
+            validity.setManaged(false);
+            validity.setVisible(false);
         }
     }
 
