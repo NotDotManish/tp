@@ -17,4 +17,5 @@ Person *--> "*" Tag
 Trainer *--> Email
 Client *--> "0..1" WorkoutFocus
 Client *--> "0..1" Remark
+Client *--> "0..1" Validity
 @enduml

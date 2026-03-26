@@ -21,6 +21,7 @@ Class Name
 Class Phone
 Class WorkoutFocus
 Class Remark
+Class Validity
 Class Tag
 
 Class I #FFFFFF
@@ -49,6 +50,7 @@ Person *--> "*" Tag
 Trainer *--> Email
 Client *--> "0..1" WorkoutFocus
 Client *--> "0..1" Remark
+Client *--> "0..1" Validity
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I

@@ -40,6 +40,7 @@ This guide is written for **gym managers and administrators** who want a fast, k
   - [Listing all clients](#listing-all-clients-list-clients)
   - [Viewing trainer statistics](#viewing-trainer-statistics-stats)
   - [Viewing a trainer's clients](#viewing-a-trainers-clients)
+  - [Viewing trainer statistics](#viewing-trainer-statistics-stats)
   - [Finding persons](#finding-persons-find)
   - [Finding trainers](#finding-trainers-find-trainers)
   - [Finding clients](#finding-clients-find-clients)
@@ -132,6 +133,10 @@ Format: `help`
 
 ![help message](images/helpMessage.png)
 
+**Expected outcome:** The Help Window opens or comes to the front, displaying a link to the User Guide and a command summary.
+
+[⬆ Back to top](#table-of-contents)
+
 ---
 
 ### Adding a trainer: `add-trainer`
@@ -142,6 +147,10 @@ Format: `add-trainer n/NAME p/PHONE_NUMBER e/EMAIL`
 
 Examples:
 * `add-trainer n/John Doe p/98765432 e/johndoe@example.com`
+
+**Expected outcome:** The new trainer is added to the **Trainers** panel, and a success message is displayed.
+
+[⬆ Back to top](#table-of-contents)
 
 ---
 
@@ -162,6 +171,10 @@ Examples:
 * `add-client n/Alice Lim p/81234567 t/1` — adds Alice Lim and assigns her to the 1st trainer in the list.
 * `add-client n/Alice Lim p/81234567 t/1 v/2028-09-09` — adds Alice Lim, assigns her to the 1st trainer, and sets her membership validity to 2028-09-09.
 
+**Expected outcome:** The new client is assigned to the specified trainer, added to the **Clients** panel, and a success message is displayed.
+
+[⬆ Back to top](#table-of-contents)
+
 ---
 
 ### Reassigning a client: `reassign-client`
@@ -178,6 +191,10 @@ Format: `reassign-client CLIENT_INDEX t/TRAINER_INDEX`
 Examples:
 * `reassign-client 2 t/1` — reassigns the 2nd client to the 1st trainer.
 
+**Expected outcome:** The client's assigned trainer is updated while preserving all other data. A success message is displayed.
+
+[⬆ Back to top](#table-of-contents)
+
 ---
 
 ### Listing all persons: `list`
@@ -190,6 +207,10 @@ This command resets both lists to show all entries by:
 
 Format: `list`
 
+**Expected outcome:** Both the trainers and clients lists are refreshed to show all entries, and a success message is displayed.
+
+[⬆ Back to top](#table-of-contents)
+
 ---
 
 ### Listing all trainers: `list-trainers`
@@ -198,15 +219,30 @@ Shows all trainers in GymOps. Clears any active trainer filter.
 
 Format: `list-trainers`
 
+**Expected outcome:** The trainers list is refreshed to show all trainers, and a success message is displayed.
+
+[⬆ Back to top](#table-of-contents)
+
 ---
 
-### Listing all clients: `list-clients`
+### Listing clients: `list-clients`
 
-Shows all clients in GymOps. Clears any active client filter, including filters applied by clicking a trainer card.
+Shows all clients in GymOps, or only clients assigned to a specific trainer.
 
-Format: `list-clients`
+Format: `list-clients [TRAINER_INDEX]`
 
-<div markdown="span" class="alert alert-info">:bulb: **Tip:** After filtering clients by trainer (via the GUI), run `list-clients` to return to the full client list.</div>
+* If `TRAINER_INDEX` is omitted, shows all clients and clears any active trainer filter.
+* If `TRAINER_INDEX` is provided, shows only clients assigned to the trainer at that index in the **current trainer list**.
+
+<div markdown="span" class="alert alert-info">:bulb: **Tip:** After filtering clients by trainer (via the GUI or by using an index), run `list-clients` without an index to return to the full client list.</div>
+
+Examples:
+* `list-clients` — shows all clients.
+* `list-clients 1` — shows only clients assigned to the 1st trainer in the current list.
+
+**Expected outcome:** The clients list is refreshed to show either all clients or the specified trainer's clients, and a success message is displayed.
+
+[⬆ Back to top](#table-of-contents)
 
 ---
 
@@ -225,6 +261,20 @@ Format: `stats`
 Click on any trainer card in the **Trainers** list to filter the **Clients** list to show only that trainer's assigned clients.
 
 To clear the filter, click the **Showing All** link above the client list, or run `list`.
+
+[⬆ Back to top](#table-of-contents)
+
+---
+
+### Viewing trainer statistics: `stats`
+
+Lists all trainers sorted by the number of clients they have in descending order. Trainers with the same number of clients are sorted alphabetically by name.
+
+Format: `stats`
+
+**Expected outcome:** The trainers list is updated to show trainers sorted by their client count in descending order.
+
+[⬆ Back to top](#table-of-contents)
 
 ---
 
@@ -249,6 +299,10 @@ Examples:
 
 ![result for 'find alex david'](images/findAlexDavidResult.png)
 
+**Expected outcome:** Both lists are filtered to show only persons whose names contain the given keywords. A message showing the number of persons listed is displayed.
+
+[⬆ Back to top](#table-of-contents)
+
 ---
 
 ### Finding trainers: `find-trainers`
@@ -262,6 +316,10 @@ Format: `find-trainers KEYWORD [MORE_KEYWORDS]`
 
 Examples:
 * `find-trainers John` — returns all trainers with "John" in their name.
+
+**Expected outcome:** The trainers list is filtered to show only trainers whose names contain the given keywords. A message showing the number of trainers listed is displayed.
+
+[⬆ Back to top](#table-of-contents)
 
 ---
 
@@ -280,6 +338,10 @@ Examples:
 * `find-clients Alice` — returns all clients with "Alice" in their name.
 * `find-clients Alice Bob` — returns all clients with "Alice" or "Bob" in their name.
 
+**Expected outcome:** The clients list is filtered to show only clients whose names contain the given keywords. A message showing the number of clients listed is displayed.
+
+[⬆ Back to top](#table-of-contents)
+
 ---
 
 ### Setting a calorie target: `set-calorie-target`
@@ -295,6 +357,10 @@ Examples:
 * `set-calorie-target 1 cal/2400` — sets a 2400-calorie daily target for the 1st client.
 
 ![set calorie](images/setCalorieTarget.png)
+
+**Expected outcome:** The client's calorie target is updated and displayed on their card. A success message is displayed.
+
+[⬆ Back to top](#table-of-contents)
 
 ---
 
@@ -312,6 +378,10 @@ Examples:
 
 ![log calorie](images/logCalorie.png)
 
+**Expected outcome:** The client's calorie intake is accumulated and displayed on their card. A success message is displayed.
+
+[⬆ Back to top](#table-of-contents)
+
 ---
 
 ### Setting a workout focus: `set-focus`
@@ -326,6 +396,10 @@ Format: `set-focus c/CLIENT_INDEX f/FOCUS`
 Examples:
 * `set-focus c/1 f/Chest` — sets the 1st client's workout focus to "Chest".
 
+**Expected outcome:** The client's workout focus is updated and displayed as a tag on their card. A success message is displayed.
+
+[⬆ Back to top](#table-of-contents)
+
 ---
 
 ### Adding a remark: `remark`
@@ -339,6 +413,10 @@ Format: `remark INDEX r/REMARK`
 
 Examples:
 * `remark 1 r/Recovering from ACL surgery`
+
+**Expected outcome:** The client's remark is updated and displayed on their card. A success message is displayed.
+
+[⬆ Back to top](#table-of-contents)
 
 ---
 
@@ -355,6 +433,10 @@ Examples:
 * `set-validity 1 v/2028-09-09` — sets the 1st client's membership validity to 09 Sep 2028.
 
 ![set validity](images/setValidity.png)
+
+**Expected outcome:** The client's membership validity is updated and displayed on their card. A success message is displayed.
+
+[⬆ Back to top](#table-of-contents)
 
 ---
 
@@ -373,6 +455,10 @@ Examples:
 * `delete t/2` — deletes the 2nd trainer.
 * `delete c/1` — deletes the 1st client.
 
+**Expected outcome:** The specified person is permanently removed from the application, and a success message is displayed.
+
+[⬆ Back to top](#table-of-contents)
+
 ---
 
 ### Deleting a client: `delete-client`
@@ -387,6 +473,10 @@ Format: `delete-client INDEX`
 
 Examples:
 * `delete-client 1` — deletes the 1st client in the current list.
+
+**Expected outcome:** The client is permanently removed from the application, their assigned trainer's client count is updated, and a success message is displayed.
+
+[⬆ Back to top](#table-of-contents)
 
 ---
 
@@ -403,6 +493,10 @@ Format: `delete-trainer INDEX`
 Examples:
 * `delete-trainer 1` — deletes the 1st trainer.
 
+**Expected outcome:** The trainer is permanently removed from the application, and a success message is displayed.
+
+[⬆ Back to top](#table-of-contents)
+
 ---
 
 ### Exporting data: `export`
@@ -413,9 +507,14 @@ Format: `export FILE_PATH`
 
 * `FILE_PATH` can be an absolute path (e.g., `C:/data/export.json` on Windows or `/Users/name/export.json` on macOS/Linux) or a relative path (e.g., `data/export.json` or `export.json`).
 * If a relative path is provided, it is resolved relative to the folder where GymOps is executed.
+* The file must have a `.json` extension, and the parent directory must exist.
 
 Examples:
 * `export data/my_export.json` — exports the current data to a file named `my_export.json` inside the `data` folder.
+
+**Expected outcome:** The current data is successfully exported to the specified file, and a success message is displayed.
+
+[⬆ Back to top](#table-of-contents)
 
 ---
 
@@ -432,6 +531,10 @@ Format: `import FILE_PATH`
 Examples:
 * `import data/my_export.json` — imports the data from `my_export.json` into the application.
 
+**Expected outcome:** The application's data is entirely replaced by the contents of the imported file. The UI refreshes to show the new data, and a success message is displayed.
+
+[⬆ Back to top](#table-of-contents)
+
 ---
 
 ### Clearing all data: `clear`
@@ -444,6 +547,10 @@ Format: `clear`
 
 After clearing, GymOps will immediately save the empty data set to disk.
 
+**Expected outcome:** All trainers and clients are removed from the application, the UI panels are cleared, and a success message is displayed.
+
+[⬆ Back to top](#table-of-contents)
+
 ---
 
 ### Exiting GymOps: `exit`
@@ -453,6 +560,10 @@ Exits the application.
 GymOps saves automatically, so you do not need to run any additional command before exiting.
 
 Format: `exit`
+
+**Expected outcome:** The application window safely closes and the program terminates.
+
+[⬆ Back to top](#table-of-contents)
 
 ---
 
@@ -501,8 +612,8 @@ Install GymOps on the other computer and replace the empty data file it creates 
 | **Reassign client** | `reassign-client CLIENT_INDEX t/TRAINER_INDEX` | `reassign-client 2 t/1` |
 | **List all** | `list` | — |
 | **List trainers** | `list-trainers` | — |
-| **List clients** | `list-clients` | — |
-| **Trainer stats** | `stats` | — |
+| **List clients** | `list-clients [TRAINER_INDEX]` | `list-clients`, `list-clients 1` |
+| **Stats** | `stats` | — |
 | **Find (both lists)** | `find KEYWORD [MORE_KEYWORDS]` | `find James Jake` |
 | **Find trainers** | `find-trainers KEYWORD [MORE_KEYWORDS]` | `find-trainers John` |
 | **Find clients** | `find-clients KEYWORD [MORE_KEYWORDS]` | `find-clients Alice` |
