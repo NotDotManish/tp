@@ -13,6 +13,7 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.Validity;
 import seedu.address.model.person.WorkoutFocus;
 import seedu.address.model.tag.Tag;
 
@@ -151,6 +152,21 @@ public class ParserUtil {
             throw new ParseException(Remark.MESSAGE_CONSTRAINTS);
         }
         return new Remark(trimmedRemark);
+    }
+
+    /**
+     * Parses a {@code String validity} into a {@code Validity}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code validity} is invalid.
+     */
+    public static Validity parseValidity(String validity) throws ParseException {
+        requireNonNull(validity);
+        String trimmedValidity = validity.trim();
+        if (!Validity.isValidValidity(trimmedValidity)) {
+            throw new ParseException(Validity.MESSAGE_CONSTRAINTS);
+        }
+        return new Validity(trimmedValidity);
     }
 }
 

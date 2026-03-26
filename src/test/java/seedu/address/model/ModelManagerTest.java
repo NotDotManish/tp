@@ -126,7 +126,7 @@ public class ModelManagerTest {
         assertFalse(modelManager.equals(new ModelManager(differentAddressBook, userPrefs)));
 
         // different filteredList -> returns false
-        String[] keywords = ALICE.getName().fullName.split("\\s+");
+        String[] keywords = ALICE.getName().getFullName().split("\\s+");
         modelManager.updateFilteredPersonList(new NameContainsKeywordsPredicate(Arrays.asList(keywords)));
         assertFalse(modelManager.equals(new ModelManager(addressBook, userPrefs)));
 
@@ -219,7 +219,10 @@ public class ModelManagerTest {
         model.setPerson(trainer, editedTrainer);
 
         assertEquals(Optional.of(editedTrainer), model.getSelectedTrainer());
-        assertEquals(0, model.getFilteredClientList().size());
+        assertEquals(1, model.getFilteredClientList().size());
+        Client updatedClient = (Client) model.getFilteredClientList().get(0);
+        assertEquals(editedTrainer.getPhone(), updatedClient.getTrainerPhone());
+        assertEquals(editedTrainer.getName(), updatedClient.getTrainerName());
     }
 
     @Test

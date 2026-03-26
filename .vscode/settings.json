@@ -24,7 +24,7 @@
     "java.sources.organizeImports.staticStarThreshold": 999,
 
     "[java]": {
-        "editor.formatOnSave": true,
+        "editor.formatOnSave": false,
         "editor.codeActionsOnSave": {
             "source.organizeImports": "never"
         }

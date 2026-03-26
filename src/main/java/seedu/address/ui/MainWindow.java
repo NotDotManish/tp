@@ -2,9 +2,11 @@ package seedu.address.ui;
 
 import java.util.logging.Logger;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
@@ -21,8 +23,8 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.Trainer;
 
 /**
- * The Main Window. Provides the basic application layout containing
- * a menu bar and space where other JavaFX elements can be placed.
+ * The Main Window. Provides the basic application layout containing a menu bar
+ * and space where other JavaFX elements can be placed.
  */
 public class MainWindow extends UiPart<Stage> {
 
@@ -41,6 +43,9 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private StackPane commandBoxPlaceholder;
+
+    @FXML
+    private Menu helpMenu;
 
     @FXML
     private MenuItem helpMenuItem;
@@ -64,7 +69,8 @@ public class MainWindow extends UiPart<Stage> {
     private StackPane statusbarPlaceholder;
 
     /**
-     * Creates a {@code MainWindow} with the given {@code Stage} and {@code Logic}.
+     * Creates a {@code MainWindow} with the given {@code Stage} and
+     * {@code Logic}.
      */
     public MainWindow(Stage primaryStage, Logic logic) {
         super(FXML, primaryStage);
@@ -81,6 +87,9 @@ public class MainWindow extends UiPart<Stage> {
         helpWindow = new HelpWindow();
     }
 
+    /**
+     * Returns the primary stage of the application.
+     */
     public Stage getPrimaryStage() {
         return primaryStage;
     }
@@ -91,6 +100,7 @@ public class MainWindow extends UiPart<Stage> {
 
     /**
      * Sets the accelerator of a MenuItem.
+     *
      * @param keyCombination the KeyCombination value of the accelerator
      */
     private void setAccelerator(MenuItem menuItem, KeyCombination keyCombination) {
@@ -123,10 +133,14 @@ public class MainWindow extends UiPart<Stage> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
-        trainerListPanel = new PersonListPanel(logic.getFilteredTrainerList());
+        trainerListPanel = new PersonListPanel(
+            logic.getFilteredTrainerList(),
+            logic.getAddressBook().getPersonList());
         trainerListPanelPlaceholder.getChildren().add(trainerListPanel.getRoot());
 
-        clientListPanel = new PersonListPanel(logic.getFilteredClientList());
+        clientListPanel = new PersonListPanel(
+            logic.getFilteredClientList(),
+            logic.getAddressBook().getPersonList());
         clientListPanelPlaceholder.getChildren().add(clientListPanel.getRoot());
 
         trainerListPanel.setOnSelectedPersonChanged(this::handleSelectedTrainerChanged);
@@ -156,6 +170,17 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
+     * Intercepts the Help menu opening and directly shows the help window instead.
+     */
+    @FXML
+    private void handleHelpMenuShowing() {
+        Platform.runLater(() -> {
+            helpMenu.hide();
+            handleHelp();
+        });
+    }
+
+    /**
      * Opens the help window or focuses on it if it's already opened.
      */
     @FXML
@@ -176,22 +201,30 @@ public class MainWindow extends UiPart<Stage> {
      */
     @FXML
     private void handleExit() {
-        GuiSettings guiSettings = new GuiSettings(primaryStage.getWidth(), primaryStage.getHeight(),
-                (int) primaryStage.getX(), (int) primaryStage.getY());
+        GuiSettings guiSettings = new GuiSettings(
+                primaryStage.getWidth(),
+                primaryStage.getHeight(),
+                (int) primaryStage.getX(),
+                (int) primaryStage.getY());
         logic.setGuiSettings(guiSettings);
         helpWindow.hide();
         primaryStage.hide();
     }
 
+    /**
+     * Returns the trainer list panel.
+     */
     public PersonListPanel getPersonListPanel() {
         return trainerListPanel;
     }
 
     @FXML
     private void handleClearSelectedTrainer() {
-        logic.clearSelectedTrainer();
-        trainerListPanel.clearSelection();
-        updateClientFilterLinkText();
+        try {
+            executeCommand("list-clients");
+        } catch (CommandException | ParseException e) {
+            logger.info("Failed to list all clients: " + e.getMessage());
+        }
     }
 
     @FXML
@@ -214,8 +247,10 @@ public class MainWindow extends UiPart<Stage> {
 
     private void updateClientFilterLinkText() {
         String linkText = logic.getSelectedTrainer()
-                .map(trainer -> "Showing: " + trainer.getName().fullName)
-                .orElse("Showing All");
+                .map(trainer -> "Showing: " + trainer.getName().getFullName())
+                .orElseGet(() -> logic.isClientListFiltered()
+                        ? "Showing: Filtered"
+                        : "Showing All");
         clientFilterLink.setText(linkText);
     }
 

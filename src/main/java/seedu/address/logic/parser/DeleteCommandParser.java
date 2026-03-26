@@ -14,13 +14,18 @@ import seedu.address.logic.parser.exceptions.ParseException;
 public class DeleteCommandParser implements Parser<DeleteCommand> {
 
     /**
-     * Parses the given {@code String} of arguments in the context of the DeleteCommand
-     * and returns a DeleteCommand object for execution.
-     * @throws ParseException if the user input does not conform the expected format
+     * Parses the given {@code String} of arguments in the context of the
+     * DeleteCommand and returns a DeleteCommand object for execution.
+     *
+     * @throws ParseException if the user input does not conform the expected
+     *     format
      */
     public DeleteCommand parse(String args) throws ParseException {
         String trimmedArgs = args == null ? "" : args.trim();
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(" " + trimmedArgs, PREFIX_TRAINER, PREFIX_CLIENT);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
+                " " + trimmedArgs,
+                PREFIX_TRAINER,
+                PREFIX_CLIENT);
 
         boolean hasTrainer = argMultimap.getValue(PREFIX_TRAINER).isPresent();
         boolean hasClient = argMultimap.getValue(PREFIX_CLIENT).isPresent();
@@ -29,7 +34,8 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
         }
 
-        if (argMultimap.getAllValues(PREFIX_TRAINER).size() > 1 || argMultimap.getAllValues(PREFIX_CLIENT).size() > 1) {
+        if (argMultimap.getAllValues(PREFIX_TRAINER).size() > 1
+                || argMultimap.getAllValues(PREFIX_CLIENT).size() > 1) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
         }
 

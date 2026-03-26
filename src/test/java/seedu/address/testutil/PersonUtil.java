@@ -21,15 +21,16 @@ public class PersonUtil {
     }
 
     /**
-     * Returns the part of command string for the given {@code person}'s details.
+     * Returns the part of command string for the given {@code person}'s
+     * details.
      */
     public static String getTrainerDetails(Trainer trainer) {
         StringBuilder sb = new StringBuilder();
-        sb.append(PREFIX_NAME + trainer.getName().fullName + " ");
-        sb.append(PREFIX_PHONE + trainer.getPhone().value + " ");
-        sb.append(PREFIX_EMAIL + trainer.getEmail().value + " ");
+        sb.append(PREFIX_NAME + trainer.getName().getFullName() + " ");
+        sb.append(PREFIX_PHONE + trainer.getPhone().getValue() + " ");
+        sb.append(PREFIX_EMAIL + trainer.getEmail().getValue() + " ");
         trainer.getTags().stream().forEach(
-            s -> sb.append(PREFIX_TAG + s.tagName + " ")
+                s -> sb.append(PREFIX_TAG + s.getTagName() + " ")
         );
         return sb.toString();
     }

@@ -16,17 +16,22 @@ import seedu.address.logic.commands.DeleteClientCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.DeleteTrainerCommand;
 import seedu.address.logic.commands.ExitCommand;
+import seedu.address.logic.commands.ExportCommand;
 import seedu.address.logic.commands.FindClientsCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.FindTrainersCommand;
 import seedu.address.logic.commands.HelpCommand;
+import seedu.address.logic.commands.ImportCommand;
 import seedu.address.logic.commands.ListClientsCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.ListTrainersCommand;
 import seedu.address.logic.commands.LogCalorieIntakeCommand;
+import seedu.address.logic.commands.ReassignClientCommand;
 import seedu.address.logic.commands.RemarkCommand;
 import seedu.address.logic.commands.SetCalorieTargetCommand;
 import seedu.address.logic.commands.SetFocusCommand;
+import seedu.address.logic.commands.SetValidityCommand;
+import seedu.address.logic.commands.StatsCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
@@ -88,6 +93,12 @@ public class AddressBookParser {
         case SetFocusCommand.COMMAND_WORD:
             return new SetFocusCommandParser().parse(arguments);
 
+        case SetValidityCommand.COMMAND_WORD:
+            return new SetValidityCommandParser().parse(arguments);
+
+        case ReassignClientCommand.COMMAND_WORD:
+            return new ReassignClientCommandParser().parse(arguments);
+
         case RemarkCommand.COMMAND_WORD:
             return new RemarkCommandParser().parse(arguments);
 
@@ -109,6 +120,9 @@ public class AddressBookParser {
         case ListTrainersCommand.COMMAND_WORD:
             return new ListTrainersCommand();
 
+        case StatsCommand.COMMAND_WORD:
+            return new StatsCommand();
+
         case ListClientsCommand.COMMAND_WORD:
             return new ListClientsCommandParser().parse(arguments);
 
@@ -117,6 +131,12 @@ public class AddressBookParser {
 
         case HelpCommand.COMMAND_WORD:
             return new HelpCommand();
+
+        case ExportCommand.COMMAND_WORD:
+            return new ExportCommandParser().parse(arguments);
+
+        case ImportCommand.COMMAND_WORD:
+            return new ImportCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);

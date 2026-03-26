@@ -23,7 +23,7 @@ public class RemarkTest {
     @Test
     public void constructor_validRemark_success() {
         Remark remark = new Remark("Recovering from ACL surgery");
-        assertEquals("Recovering from ACL surgery", remark.value);
+        assertEquals("Recovering from ACL surgery", remark.getValue());
     }
 
     @Test

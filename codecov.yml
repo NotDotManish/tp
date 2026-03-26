@@ -1,3 +1,6 @@
+ignore:
+  - "src/main/java/seedu/address/ui"
+
 coverage:
   status:
     project:

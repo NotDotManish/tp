@@ -171,6 +171,29 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseValidity_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseValidity(null));
+    }
+
+    @Test
+    public void parseValidity_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseValidity("invalid"));
+    }
+
+    @Test
+    public void parseValidity_validValueWithoutWhitespace_returnsValidity() throws Exception {
+        seedu.address.model.person.Validity expectedValidity = new seedu.address.model.person.Validity("2026-12-31");
+        assertEquals(expectedValidity, ParserUtil.parseValidity("2026-12-31"));
+    }
+
+    @Test
+    public void parseValidity_validValueWithWhitespace_returnsTrimmedValidity() throws Exception {
+        String validityWithWhitespace = WHITESPACE + "2026-12-31" + WHITESPACE;
+        seedu.address.model.person.Validity expectedValidity = new seedu.address.model.person.Validity("2026-12-31");
+        assertEquals(expectedValidity, ParserUtil.parseValidity(validityWithWhitespace));
+    }
+
+    @Test
     public void constructor_coverage() {
         new ParserUtil();
     }

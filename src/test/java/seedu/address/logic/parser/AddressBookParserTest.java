@@ -20,10 +20,12 @@ import seedu.address.logic.commands.DeleteClientCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.DeleteTrainerCommand;
 import seedu.address.logic.commands.ExitCommand;
+import seedu.address.logic.commands.ExportCommand;
 import seedu.address.logic.commands.FindClientsCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.FindTrainersCommand;
 import seedu.address.logic.commands.HelpCommand;
+import seedu.address.logic.commands.ImportCommand;
 import seedu.address.logic.commands.ListClientsCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.ListTrainersCommand;
@@ -119,6 +121,20 @@ public class AddressBookParserTest {
     public void parseCommand_exit() throws Exception {
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD) instanceof ExitCommand);
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD + " 3") instanceof ExitCommand);
+    }
+
+    @Test
+    public void parseCommand_export() throws Exception {
+        ExportCommand command = (ExportCommand) parser.parseCommand(
+                ExportCommand.COMMAND_WORD + " data/export.json");
+        assertEquals(new ExportCommand(java.nio.file.Paths.get("data/export.json")), command);
+    }
+
+    @Test
+    public void parseCommand_import() throws Exception {
+        ImportCommand command = (ImportCommand) parser.parseCommand(
+                ImportCommand.COMMAND_WORD + " data/import.json");
+        assertEquals(new ImportCommand(java.nio.file.Paths.get("data/import.json")), command);
     }
 
     @Test

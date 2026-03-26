@@ -52,7 +52,7 @@ public class RemarkCommandTest {
                 client.getWorkoutFocus(), Optional.of(remark));
 
         String expectedMessage = String.format(RemarkCommand.MESSAGE_SUCCESS,
-                updatedClient.getName(), remark.value);
+                updatedClient.getName(), remark.getValue());
 
         AddressBook expectedAb = new AddressBook();
         expectedAb.addPerson(trainer);
@@ -83,7 +83,7 @@ public class RemarkCommandTest {
                 client.getCalorieTarget(), client.getCalorieIntake(),
                 client.getWorkoutFocus(), Optional.of(newRemark));
         String expectedMessage = String.format(RemarkCommand.MESSAGE_SUCCESS,
-                updatedClient.getName(), newRemark.value);
+                updatedClient.getName(), newRemark.getValue());
 
         AddressBook expectedAb = new AddressBook();
         expectedAb.addPerson(trainer);
@@ -163,6 +163,7 @@ public class RemarkCommandTest {
     }
 
     private static class ModelStubWithFilteredClientList extends ModelStub {
+
         private final ObservableList<Person> filteredClientList;
 
         ModelStubWithFilteredClientList(Person person) {

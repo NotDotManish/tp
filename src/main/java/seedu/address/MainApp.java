@@ -1,6 +1,7 @@
 package seedu.address;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -57,6 +58,8 @@ public class MainApp extends Application {
 
         UserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(config.getUserPrefsFilePath());
         UserPrefs userPrefs = initPrefs(userPrefsStorage);
+        Path dataFilePath = migrateDataFile(userPrefs.getAddressBookFilePath());
+        userPrefs.setAddressBookFilePath(dataFilePath);
         AddressBookStorage addressBookStorage = new JsonAddressBookStorage(userPrefs.getAddressBookFilePath());
         storage = new StorageManager(addressBookStorage, userPrefsStorage);
 
@@ -91,6 +94,27 @@ public class MainApp extends Application {
         }
 
         return new ModelManager(initialData, userPrefs);
+    }
+
+    /**
+     * Migrates the data file from {@code addressbook.json} to {@code GymOps.json} if needed,
+     * and returns the path that should be used for the data file.
+     * If {@code currentPath} does not refer to {@code addressbook.json}, it is returned unchanged.
+     */
+    static Path migrateDataFile(Path currentPath) {
+        if (!currentPath.getFileName().toString().equals("addressbook.json")) {
+            return currentPath;
+        }
+        Path gymOpsPath = currentPath.resolveSibling("GymOps.json");
+        if (Files.exists(currentPath) && !Files.exists(gymOpsPath)) {
+            try {
+                Files.move(currentPath, gymOpsPath);
+                logger.info("Migrated data file from " + currentPath + " to " + gymOpsPath);
+            } catch (IOException e) {
+                logger.warning("Failed to migrate data file: " + StringUtil.getDetails(e));
+            }
+        }
+        return gymOpsPath;
     }
 
     private void initLogging(Config config) {

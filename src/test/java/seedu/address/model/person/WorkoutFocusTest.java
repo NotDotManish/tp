@@ -24,7 +24,7 @@ public class WorkoutFocusTest {
     @Test
     public void constructor_validWorkoutFocus_success() {
         WorkoutFocus focus = new WorkoutFocus("Chest");
-        assertEquals("Chest", focus.value);
+        assertEquals("Chest", focus.getValue());
     }
 
     @Test

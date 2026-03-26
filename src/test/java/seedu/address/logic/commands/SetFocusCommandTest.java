@@ -52,7 +52,7 @@ public class SetFocusCommandTest {
                 Optional.of(focus), client.getRemark());
 
         String expectedMessage = String.format(SetFocusCommand.MESSAGE_SUCCESS,
-                updatedClient.getName(), focus.value);
+                updatedClient.getName(), focus.getValue());
 
         AddressBook expectedAb = new AddressBook();
         expectedAb.addPerson(trainer);
@@ -83,7 +83,7 @@ public class SetFocusCommandTest {
                 client.getCalorieTarget(), client.getCalorieIntake(),
                 Optional.of(newFocus), client.getRemark());
         String expectedMessage = String.format(SetFocusCommand.MESSAGE_SUCCESS,
-                updatedClient.getName(), newFocus.value);
+                updatedClient.getName(), newFocus.getValue());
 
         AddressBook expectedAb = new AddressBook();
         expectedAb.addPerson(trainer);
@@ -164,6 +164,7 @@ public class SetFocusCommandTest {
     }
 
     private static class ModelStubWithFilteredClientList extends ModelStub {
+
         private final ObservableList<Person> filteredClientList;
 
         ModelStubWithFilteredClientList(Person person) {

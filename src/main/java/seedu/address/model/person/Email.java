@@ -4,8 +4,8 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
- * Represents a Person's email in the address book.
- * Guarantees: immutable; is valid as declared in {@link #isValidEmail(String)}
+ * Represents a Person's email in the address book. Guarantees: immutable; is
+ * valid as declared in {@link #isValidEmail(String)}
  */
 public class Email {
 
@@ -31,7 +31,7 @@ public class Email {
     private static final String DOMAIN_REGEX = "(" + DOMAIN_PART_REGEX + "\\.)*" + DOMAIN_LAST_PART_REGEX;
     public static final String VALIDATION_REGEX = LOCAL_PART_REGEX + "@" + DOMAIN_REGEX;
 
-    public final String value;
+    private final String value;
 
     /**
      * Constructs an {@code Email}.
@@ -42,6 +42,10 @@ public class Email {
         requireNonNull(email);
         checkArgument(isValidEmail(email), MESSAGE_CONSTRAINTS);
         value = email;
+    }
+
+    public String getValue() {
+        return value;
     }
 
     /**

@@ -105,6 +105,11 @@ public interface Model {
     void updateFilteredTrainerList(Predicate<Person> predicate);
 
     /**
+     * Updates the sort comparator of the trainer list to sort by the given {@code comparator}.
+     */
+    void updateSortedTrainerList(java.util.Comparator<Person> comparator);
+
+    /**
      * Updates the filter of the filtered client list to filter by the given {@code predicate}.
      * The resulting list will still only contain {@code Client}s.
      */
@@ -123,4 +128,7 @@ public interface Model {
 
     /** Returns true if the trainer list has an active search filter (not showing all trainers). */
     boolean isTrainerListFiltered();
+
+    /** Returns true if the client list has an active search filter (not showing all clients). */
+    boolean isClientListFiltered();
 }

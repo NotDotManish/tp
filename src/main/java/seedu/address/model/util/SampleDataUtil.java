@@ -20,18 +20,39 @@ import seedu.address.model.tag.Tag;
 public class SampleDataUtil {
     public static Person[] getSamplePersons() {
         return new Person[] {
-            new Trainer(new Name("Alex Yeoh"), new Phone("87438807"), new Email("alexyeoh@example.com"),
-                getTagSet("friends")),
-            new Trainer(new Name("Bernice Yu"), new Phone("99272758"), new Email("berniceyu@example.com"),
-                getTagSet("colleagues", "friends")),
-            new Trainer(new Name("Charlotte Oliveiro"), new Phone("93210283"), new Email("charlotte@example.com"),
-                getTagSet("neighbours")),
-            new Client(new Name("David Li"), new Phone("91031282"), new Phone("87438807"), new Name("Alex Yeoh"),
-                getTagSet("family")),
-            new Client(new Name("Irfan Ibrahim"), new Phone("92492021"), new Phone("99272758"), new Name("Bernice Yu"),
-                getTagSet("classmates")),
-            new Client(new Name("Roy Balakrishnan"), new Phone("92624417"), new Phone("93210283"),
-                new Name("Charlotte Oliveiro"), getTagSet("colleagues"))
+            new Trainer(
+                    new Name("Alex Yeoh"),
+                    new Phone("87438807"),
+                    new Email("alexyeoh@example.com"),
+                    getTagSet("friends")),
+            new Trainer(
+                    new Name("Bernice Yu"),
+                    new Phone("99272758"),
+                    new Email("berniceyu@example.com"),
+                    getTagSet("colleagues", "friends")),
+            new Trainer(
+                    new Name("Charlotte Oliveiro"),
+                    new Phone("93210283"),
+                    new Email("charlotte@example.com"),
+                    getTagSet("neighbours")),
+            new Client(
+                    new Name("David Li"),
+                    new Phone("91031282"),
+                    new Phone("87438807"),
+                    new Name("Alex Yeoh"),
+                    getTagSet("family")),
+            new Client(
+                    new Name("Irfan Ibrahim"),
+                    new Phone("92492021"),
+                    new Phone("99272758"),
+                    new Name("Bernice Yu"),
+                    getTagSet("classmates")),
+            new Client(
+                    new Name("Roy Balakrishnan"),
+                    new Phone("92624417"),
+                    new Phone("93210283"),
+                    new Name("Charlotte Oliveiro"),
+                    getTagSet("colleagues"))
         };
     }
 

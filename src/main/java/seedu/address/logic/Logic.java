@@ -53,6 +53,9 @@ public interface Logic {
     /** Returns true if the trainer list has an active search filter (not showing all trainers). */
     boolean isTrainerListFiltered();
 
+    /** Returns true if the client list has an active search filter (not showing all clients). */
+    boolean isClientListFiltered();
+
     /**
      * Returns the user prefs' address book file path.
      */
