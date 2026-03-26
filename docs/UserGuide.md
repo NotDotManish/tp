@@ -37,7 +37,8 @@ This guide is written for **gym managers and administrators** who want a fast, k
   - [Reassigning a client](#reassigning-a-client-reassign-client)
   - [Listing all persons](#listing-all-persons-list)
   - [Listing all trainers](#listing-all-trainers-list-trainers)
-  - [Listing all clients](#listing-clients-list-clients)
+  - [Listing all clients](#listing-all-clients-list-clients)
+  - [Viewing trainer statistics](#viewing-trainer-statistics-stats)
   - [Viewing a trainer's clients](#viewing-a-trainers-clients)
   - [Viewing trainer statistics](#viewing-trainer-statistics-stats)
   - [Finding persons](#finding-persons-find)
@@ -92,7 +93,7 @@ This guide is written for **gym managers and administrators** who want a fast, k
    | 1 | `list-trainers` | View all trainers |
    | 2 | `add-trainer n/John Doe p/98765432 e/johndoe@example.com` | Add a new trainer |
    | 3 | `list-trainers` | Confirm the trainer was added |
-   | 4 | `add-client n/Alice Lim p/81234567 t/1 [v/2026-12-31]` | Assign a client to trainer #1 |
+   | 4 | `add-client n/Alice Lim p/81234567 t/1 [v/2028-09-09]` | Assign a client to trainer #1 |
    | 5 | `find-clients Alice` | Search for the client you just added |
    | 6 | `delete-client 1` | Delete the 1st client in the current list |
    | 7 | `clear` | Delete all data |
@@ -168,7 +169,7 @@ Format: `add-client n/NAME p/PHONE_NUMBER t/TRAINER_INDEX [v/VALIDITY]`
 
 Examples:
 * `add-client n/Alice Lim p/81234567 t/1` — adds Alice Lim and assigns her to the 1st trainer in the list.
-* `add-client n/Alice Lim p/81234567 t/1 v/2026-12-31` — adds Alice Lim, assigns her to the 1st trainer, and sets her membership validity to 2026-12-31.
+* `add-client n/Alice Lim p/81234567 t/1 v/2028-09-09` — adds Alice Lim, assigns her to the 1st trainer, and sets her membership validity to 2028-09-09.
 
 **Expected outcome:** The new client is assigned to the specified trainer, added to the **Clients** panel, and a success message is displayed.
 
@@ -242,6 +243,16 @@ Examples:
 **Expected outcome:** The clients list is refreshed to show either all clients or the specified trainer's clients, and a success message is displayed.
 
 [⬆ Back to top](#table-of-contents)
+
+---
+
+### Viewing trainer statistics: `stats`
+
+Shows all trainers in GymOps, sorted by the number of clients they have in descending order. Trainers with the same number of clients will be sorted alphabetically by name. Clears any active trainer filter.
+
+Format: `stats`
+
+![stats message](images/stats.png)
 
 ---
 
@@ -343,7 +354,9 @@ Format: `set-calorie-target INDEX cal/CALORIES`
 * `CALORIES` must be a positive integer.
 
 Examples:
-* `set-calorie-target 1 cal/2000` — sets a 2000-calorie daily target for the 1st client.
+* `set-calorie-target 1 cal/2400` — sets a 2400-calorie daily target for the 1st client.
+
+![set calorie](images/setCalorieTarget.png)
 
 **Expected outcome:** The client's calorie target is updated and displayed on their card. A success message is displayed.
 
@@ -361,7 +374,9 @@ Format: `log-calorie INDEX cal/CALORIES`
 * `CALORIES` must be a positive integer.
 
 Examples:
-* `log-calorie 1 cal/500` — adds 500 calories to the 1st client's daily intake.
+* `log-calorie 1 cal/1500` — adds 1500 calories to the 1st client's daily intake.
+
+![log calorie](images/logCalorie.png)
 
 **Expected outcome:** The client's calorie intake is accumulated and displayed on their card. A success message is displayed.
 
@@ -415,7 +430,9 @@ Format: `set-validity INDEX v/VALIDITY`
 * `VALIDITY` must be a valid date in the format `YYYY-MM-DD`.
 
 Examples:
-* `set-validity 1 v/2026-12-31` — sets the 1st client's membership validity to 31 Dec 2026.
+* `set-validity 1 v/2028-09-09` — sets the 1st client's membership validity to 09 Sep 2028.
+
+![set validity](images/setValidity.png)
 
 **Expected outcome:** The client's membership validity is updated and displayed on their card. A success message is displayed.
 
@@ -591,7 +608,7 @@ Install GymOps on the other computer and replace the empty data file it creates 
 |--------|--------|---------|
 | **Help** | `help` | — |
 | **Add trainer** | `add-trainer n/NAME p/PHONE_NUMBER e/EMAIL` | `add-trainer n/John Doe p/98765432 e/johndoe@example.com` |
-| **Add client** | `add-client n/NAME p/PHONE_NUMBER t/TRAINER_INDEX [v/VALIDITY]` | `add-client n/Alice Lim p/81234567 t/1 v/2026-12-31` |
+| **Add client** | `add-client n/NAME p/PHONE_NUMBER t/TRAINER_INDEX [v/VALIDITY]` | `add-client n/Alice Lim p/81234567 t/1 v/2028-09-09` |
 | **Reassign client** | `reassign-client CLIENT_INDEX t/TRAINER_INDEX` | `reassign-client 2 t/1` |
 | **List all** | `list` | — |
 | **List trainers** | `list-trainers` | — |
@@ -600,11 +617,11 @@ Install GymOps on the other computer and replace the empty data file it creates 
 | **Find (both lists)** | `find KEYWORD [MORE_KEYWORDS]` | `find James Jake` |
 | **Find trainers** | `find-trainers KEYWORD [MORE_KEYWORDS]` | `find-trainers John` |
 | **Find clients** | `find-clients KEYWORD [MORE_KEYWORDS]` | `find-clients Alice` |
-| **Set calorie target** | `set-calorie-target INDEX cal/CALORIES` | `set-calorie-target 1 cal/2000` |
-| **Log calorie intake** | `log-calorie INDEX cal/CALORIES` | `log-calorie 1 cal/500` |
+| **Set calorie target** | `set-calorie-target INDEX cal/CALORIES` | `set-calorie-target 1 cal/2400` |
+| **Log calorie intake** | `log-calorie INDEX cal/CALORIES` | `log-calorie 1 cal/1500` |
 | **Set workout focus** | `set-focus c/CLIENT_INDEX f/FOCUS` | `set-focus c/1 f/Chest` |
 | **Remark** | `remark INDEX r/REMARK` | `remark 1 r/Recovering from ACL surgery` |
-| **Set validity** | `set-validity INDEX v/VALIDITY` | `set-validity 1 v/2026-12-31` |
+| **Set validity** | `set-validity INDEX v/VALIDITY` | `set-validity 1 v/2028-09-09` |
 | **Delete (typed)** | `delete t/TRAINER_INDEX` or `delete c/CLIENT_INDEX` | `delete t/2`, `delete c/1` |
 | **Delete client** | `delete-client INDEX` | `delete-client 1` |
 | **Delete trainer** | `delete-trainer INDEX` | `delete-trainer 1` |
