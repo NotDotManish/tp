@@ -25,7 +25,7 @@ High-speed management of a **hierarchical trainer → client** structure, plus l
 ## Key workflows
 
 * **Trainer → Client operations**: add clients assigned to trainers, with a GUI feature to easily view a trainer's designated clients simply by clicking on their card.
-* **Daily tracking**: set calorie targets, log intake, set workout focus, and record client remarks.
+* **Daily tracking**: set calorie targets, log intake, set workout focus, record client remarks, and manage membership validity.
 
 ## Command prefixes (Trainer vs Client)
 
@@ -34,7 +34,7 @@ GymOps distinguishes trainer and client operations with explicit commands/prefix
 Examples:
 
 * Add a trainer: `add-trainer n/John Doe p/98765432 e/johndoe@example.com`
-* Add a client assigned to a trainer: `add-client n/Alice Lim p/81234567 t/1`
+* Add a client assigned to a trainer: `add-client n/Alice Lim p/81234567 t/1 [v/YYYY-MM-DD]`
 * Delete a trainer or client (typed delete): `delete t/1` / `delete c/1`
 
 Calorie tracking:
@@ -47,7 +47,7 @@ Calorie tracking:
 
 * Trainer management: `add-trainer`, `delete-trainer`, `list-trainers`, `find-trainers`
 * Client management: `add-client`, `delete-client`, `list-clients`, `find-clients`
-* Tracking: `set-calorie-target`, `log-calorie`, `set-focus`, `remark`
+* Tracking: `set-calorie-target`, `log-calorie`, `set-focus`, `remark`, `set-validity`
 * General: `list`, `find`, `delete` (typed), `clear`, `help`, `exit`
 
 ## Scope

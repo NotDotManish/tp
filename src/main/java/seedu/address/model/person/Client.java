@@ -23,6 +23,7 @@ public class Client extends Person {
     private final int calorieIntake;
     private final Optional<WorkoutFocus> workoutFocus;
     private final Optional<Remark> remark;
+    private final Optional<Validity> validity;
 
     /**
      * Constructs a {@code Client} with all fields including calorie tracking data.
@@ -39,15 +40,27 @@ public class Client extends Person {
     public Client(Name name, Phone phone, Phone trainerPhone, Name trainerName, Set<Tag> tags,
                   int calorieTarget, int calorieIntake) {
         this(name, phone, trainerPhone, trainerName, tags, calorieTarget, calorieIntake, Optional.empty(),
-                Optional.empty());
+                Optional.empty(), Optional.empty());
     }
 
     /**
      * Constructs a {@code Client} with all fields including calorie tracking data and optional client-only fields.
+     * Use this constructor for backwards-compatibility when validity is not present.
      */
     public Client(Name name, Phone phone, Phone trainerPhone, Name trainerName, Set<Tag> tags,
                   int calorieTarget, int calorieIntake,
                   Optional<WorkoutFocus> workoutFocus, Optional<Remark> remark) {
+        this(name, phone, trainerPhone, trainerName, tags, calorieTarget,
+                calorieIntake, workoutFocus, remark, Optional.empty());
+    }
+
+    /**
+     * Constructs a {@code Client} with all fields including calorie tracking data,
+     * optional client-only fields, and validity.
+     */
+    public Client(Name name, Phone phone, Phone trainerPhone, Name trainerName, Set<Tag> tags,
+                  int calorieTarget, int calorieIntake,
+                  Optional<WorkoutFocus> workoutFocus, Optional<Remark> remark, Optional<Validity> validity) {
         super(name, phone, tags);
         requireAllNonNull(trainerPhone, trainerName);
         this.trainerPhone = trainerPhone;
@@ -56,6 +69,7 @@ public class Client extends Person {
         this.calorieIntake = calorieIntake;
         this.workoutFocus = workoutFocus == null ? Optional.empty() : workoutFocus;
         this.remark = remark == null ? Optional.empty() : remark;
+        this.validity = validity == null ? Optional.empty() : validity;
     }
 
     /**
@@ -78,7 +92,8 @@ public class Client extends Person {
             int calorieTarget,
             int calorieIntake,
             Optional<WorkoutFocus> workoutFocus,
-            Optional<Remark> remark) {
+            Optional<Remark> remark,
+            Optional<Validity> validity) {
         return new Client(
                 getName(),
                 getPhone(),
@@ -88,7 +103,8 @@ public class Client extends Person {
                 calorieTarget,
                 calorieIntake,
                 workoutFocus,
-                remark);
+                remark,
+                validity);
     }
 
     /**
@@ -102,7 +118,8 @@ public class Client extends Person {
                 calorieTarget,
                 calorieIntake,
                 workoutFocus,
-                remark);
+                remark,
+                validity);
     }
 
     /**
@@ -115,7 +132,8 @@ public class Client extends Person {
                 calorieTarget,
                 calorieIntake,
                 workoutFocus,
-                remark);
+                remark,
+                validity);
     }
 
     /**
@@ -128,7 +146,8 @@ public class Client extends Person {
                 calorieTarget,
                 calorieIntake,
                 workoutFocus,
-                remark);
+                remark,
+                validity);
     }
 
     /**
@@ -142,7 +161,8 @@ public class Client extends Person {
                 calorieTarget,
                 calorieIntake,
                 Optional.of(workoutFocus),
-                remark);
+                remark,
+                validity);
     }
 
     /**
@@ -156,7 +176,23 @@ public class Client extends Person {
                 calorieTarget,
                 calorieIntake,
                 workoutFocus,
-                Optional.of(remark));
+                Optional.of(remark),
+                validity);
+    }
+
+    /**
+     * Returns a copy of this client with an updated validity.
+     */
+    public Client withValidity(Validity validity) {
+        requireAllNonNull(validity);
+        return copyWith(
+                trainerPhone,
+                trainerName,
+                calorieTarget,
+                calorieIntake,
+                workoutFocus,
+                remark,
+                Optional.of(validity));
     }
 
     /**
@@ -171,6 +207,13 @@ public class Client extends Person {
      */
     public Optional<Remark> getRemark() {
         return remark;
+    }
+
+    /**
+     * Returns the client's validity if one has been set.
+     */
+    public Optional<Validity> getValidity() {
+        return validity;
     }
 
     /**
@@ -220,13 +263,14 @@ public class Client extends Person {
                 && calorieTarget == otherClient.calorieTarget
             && calorieIntake == otherClient.calorieIntake
             && workoutFocus.equals(otherClient.workoutFocus)
-            && remark.equals(otherClient.remark);
+            && remark.equals(otherClient.remark)
+            && validity.equals(otherClient.validity);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(name, phone, trainerPhone, trainerName, tags, calorieTarget, calorieIntake,
-                workoutFocus, remark);
+                workoutFocus, remark, validity);
     }
 
     @Override
@@ -241,6 +285,7 @@ public class Client extends Person {
                 .add("calorieIntake", calorieIntake)
                 .add("workoutFocus", workoutFocus)
                 .add("remark", remark)
+                .add("validity", validity)
                 .toString();
     }
 }

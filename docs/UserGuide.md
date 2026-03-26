@@ -46,6 +46,7 @@ This guide is written for **gym managers and administrators** who want a fast, k
   - [Logging calorie intake](#logging-calorie-intake-log-calorie)
   - [Setting a workout focus](#setting-a-workout-focus-set-focus)
   - [Adding a remark](#adding-a-remark-remark)
+  - [Setting a membership validity](#setting-a-membership-validity-set-validity)
   - [Deleting a person](#deleting-a-person-delete)
   - [Deleting a client](#deleting-a-client-delete-client)
   - [Deleting a trainer](#deleting-a-trainer-delete-trainer)
@@ -90,7 +91,7 @@ This guide is written for **gym managers and administrators** who want a fast, k
    | 1 | `list-trainers` | View all trainers |
    | 2 | `add-trainer n/John Doe p/98765432 e/johndoe@example.com` | Add a new trainer |
    | 3 | `list-trainers` | Confirm the trainer was added |
-   | 4 | `add-client n/Alice Lim p/81234567 t/1` | Assign a client to trainer #1 |
+   | 4 | `add-client n/Alice Lim p/81234567 t/1 [v/2026-12-31]` | Assign a client to trainer #1 |
    | 5 | `find-clients Alice` | Search for the client you just added |
    | 6 | `delete-client 1` | Delete the 1st client in the current list |
    | 7 | `clear` | Delete all data |
@@ -141,9 +142,10 @@ Examples:
 
 Adds a new client and assigns them to an existing trainer.
 
-Format: `add-client n/NAME p/PHONE_NUMBER t/TRAINER_INDEX`
+Format: `add-client n/NAME p/PHONE_NUMBER t/TRAINER_INDEX [v/VALIDITY]`
 
 * `TRAINER_INDEX` must refer to a trainer visible in the **current trainer list**.
+* `VALIDITY` is an optional field must be a valid date in the format `YYYY-MM-DD`.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:** If the trainer list is filtered (e.g. after a `find-trainers` command), `TRAINER_INDEX` refers to the filtered results. Run `list-trainers` first to assign by the full list.</div>
 
@@ -151,6 +153,7 @@ Format: `add-client n/NAME p/PHONE_NUMBER t/TRAINER_INDEX`
 
 Examples:
 * `add-client n/Alice Lim p/81234567 t/1` — adds Alice Lim and assigns her to the 1st trainer in the list.
+* `add-client n/Alice Lim p/81234567 t/1 v/2026-12-31` — adds Alice Lim, assigns her to the 1st trainer, and sets her membership validity to 2026-12-31.
 
 ---
 
@@ -314,6 +317,20 @@ Examples:
 
 ---
 
+### Setting a membership validity: `set-validity`
+
+Sets the membership validity date for a client. Overwrites any existing validity.
+
+Format: `set-validity INDEX v/VALIDITY`
+
+* `INDEX` must refer to a client in the **client list**.
+* `VALIDITY` must be a valid date in the format `YYYY-MM-DD`.
+
+Examples:
+* `set-validity 1 v/2026-12-31` — sets the 1st client's membership validity to 31 Dec 2026.
+
+---
+
 ### Deleting a person: `delete`
 
 Deletes a trainer or client using a typed prefix to specify the list.
@@ -449,7 +466,7 @@ Install GymOps on the other computer and replace the empty data file it creates 
 |--------|--------|---------|
 | **Help** | `help` | — |
 | **Add trainer** | `add-trainer n/NAME p/PHONE_NUMBER e/EMAIL` | `add-trainer n/John Doe p/98765432 e/johndoe@example.com` |
-| **Add client** | `add-client n/NAME p/PHONE_NUMBER t/TRAINER_INDEX` | `add-client n/Alice Lim p/81234567 t/1` |
+| **Add client** | `add-client n/NAME p/PHONE_NUMBER t/TRAINER_INDEX [v/VALIDITY]` | `add-client n/Alice Lim p/81234567 t/1 v/2026-12-31` |
 | **Reassign client** | `reassign-client CLIENT_INDEX t/TRAINER_INDEX` | `reassign-client 2 t/1` |
 | **List all** | `list` | — |
 | **List trainers** | `list-trainers` | — |
@@ -461,6 +478,7 @@ Install GymOps on the other computer and replace the empty data file it creates 
 | **Log calorie intake** | `log-calorie INDEX cal/CALORIES` | `log-calorie 1 cal/500` |
 | **Set workout focus** | `set-focus c/CLIENT_INDEX f/FOCUS` | `set-focus c/1 f/Chest` |
 | **Remark** | `remark INDEX r/REMARK` | `remark 1 r/Recovering from ACL surgery` |
+| **Set validity** | `set-validity INDEX v/VALIDITY` | `set-validity 1 v/2026-12-31` |
 | **Delete (typed)** | `delete t/TRAINER_INDEX` or `delete c/CLIENT_INDEX` | `delete t/2`, `delete c/1` |
 | **Delete client** | `delete-client INDEX` | `delete-client 1` |
 | **Delete trainer** | `delete-trainer INDEX` | `delete-trainer 1` |

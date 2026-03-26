@@ -4,9 +4,11 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TRAINER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_VALIDITY;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
@@ -17,6 +19,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Trainer;
+import seedu.address.model.person.Validity;
 
 /**
  * Adds a client to the system and assigns them to a trainer.
@@ -29,11 +32,13 @@ public class AddClientCommand extends Command {
             + "Parameters: "
             + PREFIX_NAME + "NAME "
             + PREFIX_PHONE + "PHONE "
-            + PREFIX_TRAINER + "TRAINER_INDEX\n"
+            + PREFIX_TRAINER + "TRAINER_INDEX "
+            + "[" + PREFIX_VALIDITY + "VALIDITY]\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + "Alice Lim "
             + PREFIX_PHONE + "81234567 "
-            + PREFIX_TRAINER + "1";
+            + PREFIX_TRAINER + "1 "
+            + PREFIX_VALIDITY + "2026-12-31";
 
     public static final String MESSAGE_SUCCESS = "New client added: %1$s. Assigned to Trainer: %2$s";
     public static final String MESSAGE_DUPLICATE_CLIENT = "Client with this phone number already exists.";
@@ -42,18 +47,29 @@ public class AddClientCommand extends Command {
     private final Name name;
     private final Phone phone;
     private final Index trainerIndex;
+    private final Optional<Validity> validity;
 
     /**
      * Creates an AddClientCommand to add a client assigned to the specified
-     * trainer index.
+     * trainer index, with a membership validity date.
      */
-    public AddClientCommand(Name name, Phone phone, Index trainerIndex) {
+    public AddClientCommand(Name name, Phone phone, Index trainerIndex, Optional<Validity> validity) {
         requireNonNull(name);
         requireNonNull(phone);
         requireNonNull(trainerIndex);
+        requireNonNull(validity);
         this.name = name;
         this.phone = phone;
         this.trainerIndex = trainerIndex;
+        this.validity = validity;
+    }
+
+    /**
+     * Creates an AddClientCommand to add a client assigned to the specified
+     * trainer index. (For backwards compatibility with tests)
+     */
+    public AddClientCommand(Name name, Phone phone, Index trainerIndex) {
+        this(name, phone, trainerIndex, Optional.empty());
     }
 
     @Override
@@ -80,6 +96,10 @@ public class AddClientCommand extends Command {
                 assignedTrainer.getName(),
                 new HashSet<>());
 
+        if (validity.isPresent()) {
+            toAdd = toAdd.withValidity(validity.get());
+        }
+
         if (model.hasPerson(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_CLIENT);
         }
@@ -94,6 +114,7 @@ public class AddClientCommand extends Command {
                 || (other instanceof AddClientCommand // instanceof handles nulls
                 && name.equals(((AddClientCommand) other).name)
                 && phone.equals(((AddClientCommand) other).phone)
-                && trainerIndex.equals(((AddClientCommand) other).trainerIndex));
+                && trainerIndex.equals(((AddClientCommand) other).trainerIndex)
+                && validity.equals(((AddClientCommand) other).validity));
     }
 }
