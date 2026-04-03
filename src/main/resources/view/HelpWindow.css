@@ -15,17 +15,6 @@
     -fx-padding: 4 0 2 0;
 }
 
-.help-commands-scroll {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-padding: 0;
-    -fx-background-insets: 0;
-}
-
-.help-commands-scroll > .viewport {
-    -fx-background-color: transparent;
-}
-
 #commandSummary {
     -fx-text-fill: #e2e8f0;
     -fx-font-family: "Consolas", "Courier New", monospace;
