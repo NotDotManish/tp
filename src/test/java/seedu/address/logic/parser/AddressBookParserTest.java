@@ -19,6 +19,8 @@ import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteClientCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.DeleteTrainerCommand;
+import seedu.address.logic.commands.EditTrainerCommand;
+import seedu.address.logic.commands.EditTrainerCommand.EditTrainerDescriptor;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.ExportCommand;
 import seedu.address.logic.commands.FindClientsCommand;
@@ -58,6 +60,16 @@ public class AddressBookParserTest {
                 AddClientCommand.COMMAND_WORD + " n/Alice p/81234567 t/1");
         assertEquals(new AddClientCommand(new seedu.address.model.person.Name("Alice"),
                 new seedu.address.model.person.Phone("81234567"), INDEX_FIRST_PERSON), command);
+    }
+
+    @Test
+    public void parseCommand_editTrainer() throws Exception {
+        EditTrainerDescriptor descriptor = new EditTrainerDescriptor();
+        descriptor.setName(new seedu.address.model.person.Name("John"));
+        EditTrainerCommand command = (EditTrainerCommand) parser.parseCommand(
+                EditTrainerCommand.COMMAND_WORD + " 1 n/John");
+        assertEquals(new EditTrainerCommand(INDEX_FIRST_PERSON, descriptor),
+                command);
     }
 
     @Test

@@ -33,6 +33,7 @@ This guide is written for **gym managers and administrators** who want a fast, k
 - [Features](#features)
   - [Viewing help](#viewing-help-help)
   - [Adding a trainer](#adding-a-trainer-add-trainer)
+  - [Editing a trainer](#editing-a-trainer-edit-trainer)
   - [Adding a client](#adding-a-client-add-client)
   - [Reassigning a client](#reassigning-a-client-reassign-client)
   - [Listing all persons](#listing-all-persons-list)
@@ -150,6 +151,26 @@ Examples:
 
 ![add trainer](images/addTrainer.png)
 **Expected outcome:** The new trainer is added to the **Trainers** panel, and a success message is displayed.
+
+[⬆ Back to top](#table-of-contents)
+
+---
+
+### Editing a trainer: `edit-trainer`
+
+Edits the details of an existing edit-trianer in GymOps. Use this command to update a trainer's name, phone number, or email address.
+
+Format: `edit-trainer INDEX [n/NAME] [p/PHONE] [e/EMAIL]`
+
+* `INDEX` must be a positive integer.
+* At least one optional field must be provided.
+* Existing values will be overwritten by the input values.
+
+<div markdown="span" class="alert alert-info">:bulb: **Tip:** Run `list-trainers` to confirm the correct trainer index before editing.</div>
+
+Examples:
+* `edit-trainer 1 email/johndoe@gym.com` — updates the 1st trainer's email.
+* `edit-trainer 2 n/Jane Doe p/92222222` — updates the 2nd trainer's name and phone.
 
 [⬆ Back to top](#table-of-contents)
 
@@ -605,6 +626,7 @@ Install GymOps on the other computer and replace the empty data file it creates 
 |--------|--------|---------|
 | **Help** | `help` | — |
 | **Add trainer** | `add-trainer n/NAME p/PHONE_NUMBER e/EMAIL` | `add-trainer n/John Doe p/98765432 e/johndoe@example.com` |
+| **Edit trainer** | `edit-trainer INDEX [n/NAME] [e/EMAIL]` | `edit-trainer 1 n/Jane Doe e/jane@example.com` |
 | **Add client** | `add-client n/NAME p/PHONE_NUMBER t/TRAINER_INDEX [v/VALIDITY]` | `add-client n/Alice Lim p/81234567 t/1 v/2028-09-09` |
 | **Reassign client** | `reassign-client CLIENT_INDEX t/TRAINER_INDEX` | `reassign-client 2 t/1` |
 | **List all** | `list` | — |
