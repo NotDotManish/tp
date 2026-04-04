@@ -25,7 +25,8 @@ public class FindClientsCommandParser implements Parser<FindClientsCommand> {
 
         for (String keyword : nameKeywords) {
             if (!keyword.matches("\\p{Alnum}+")) {
-                throw new ParseException("Keywords must be alphanumeric.");
+                throw new ParseException(
+                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindClientsCommand.MESSAGE_USAGE));
             }
         }
 

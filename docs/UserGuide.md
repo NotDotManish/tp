@@ -159,7 +159,7 @@ Examples:
 
 ### Editing a trainer: `edit-trainer`
 
-Edits the details of an existing edit-trianer in GymOps. Use this command to update a trainer's name, phone number, or email address.
+Edits the details of an existing trainer in GymOps. Use this command to update a trainer's name, phone number, or email address.
 
 Format: `edit-trainer INDEX [n/NAME] [p/PHONE] [e/EMAIL]`
 
@@ -170,7 +170,7 @@ Format: `edit-trainer INDEX [n/NAME] [p/PHONE] [e/EMAIL]`
 <div markdown="span" class="alert alert-info">:bulb: **Tip:** Run `list-trainers` to confirm the correct trainer index before editing.</div>
 
 Examples:
-* `edit-trainer 1 email/johndoe@gym.com` — updates the 1st trainer's email.
+* `edit-trainer 1 e/johndoe@gym.com` — updates the 1st trainer's email.
 * `edit-trainer 2 n/Jane Doe p/92222222` — updates the 2nd trainer's name and phone.
 
 [⬆ Back to top](#table-of-contents)
@@ -203,7 +203,7 @@ Examples:
 
 ### Editing a client: `edit-client`
 
-Edits the details of an existing client in GymOps. Use this command to update a edit-cleint's name, phone number, assigned trainer, calorie target, workout focus, remark, or membership validity.
+Edits the details of an existing client in GymOps. Use this command to update a client's name, phone number, assigned trainer, calorie target, workout focus, remark, or membership validity.
 
 Format: `edit-client INDEX [n/NAME] [p/PHONE] [t/TRAINER_INDEX] [cal/CALORIE_TARGET] [f/FOCUS] [r/REMARK] [v/VALIDITY]`
 
@@ -215,7 +215,7 @@ Format: `edit-client INDEX [n/NAME] [p/PHONE] [t/TRAINER_INDEX] [cal/CALORIE_TAR
 <div markdown="span" class="alert alert-info">:bulb: **Tip:** Run `list-clients` to confirm the correct client index before editing.</div>
 
 Examples:
-* `edit-client 1 name/Alice Tan` — updates the 1st client's name to Alice Tan.
+* `edit-client 1 n/Alice Tan` — updates the 1st client's name to Alice Tan.
 * `edit-client 2 p/91234567 cal/2000` — updates the 2nd client's phone and calorie target.
 * `edit-client 1 t/2 f/Arms` — reassigns the 1st client to trainer #2 and sets focus to Arms.
 
@@ -651,7 +651,7 @@ Install GymOps on the other computer and replace the empty data file it creates 
 | **Add trainer** | `add-trainer n/NAME p/PHONE_NUMBER e/EMAIL` | `add-trainer n/John Doe p/98765432 e/johndoe@example.com` |
 | **Edit trainer** | `edit-trainer INDEX [n/NAME] [e/EMAIL]` | `edit-trainer 1 n/Jane Doe e/jane@example.com` |
 | **Add client** | `add-client n/NAME p/PHONE_NUMBER t/TRAINER_INDEX [v/VALIDITY]` | `add-client n/Alice Lim p/81234567 t/1 v/2028-09-09` |
-| **Edit client** | `edit-client INDEX [n/NAME] [p/PHONE] [cal/CALORIE_TARGET] [f/FOCUS] [r/REMARK] [v/VALIDITY]` | `edit-client 1 n/Alice Tan p/91234567` |
+| **Edit client** | `edit-client INDEX [n/NAME] [p/PHONE] [t/TRAINER_INDEX] [cal/CALORIE_TARGET] [f/FOCUS] [r/REMARK] [v/VALIDITY]` | `edit-client 1 n/Alice Tan p/91234567` |
 | **Reassign client** | `reassign-client CLIENT_INDEX t/TRAINER_INDEX` | `reassign-client 2 t/1` |
 | **List all** | `list` | — |
 | **List trainers** | `list-trainers` | — |

@@ -68,16 +68,28 @@ public class EditClientCommandParser implements Parser<EditClientCommand> {
                     argMultimap.getValue(PREFIX_CALORIE).get()));
         }
         if (argMultimap.getValue(PREFIX_FOCUS).isPresent()) {
-            descriptor.setWorkoutFocus(ParserUtil.parseWorkoutFocus(
-                    argMultimap.getValue(PREFIX_FOCUS).get()));
+            String focusValue = argMultimap.getValue(PREFIX_FOCUS).get().trim();
+            if (focusValue.isEmpty()) {
+                descriptor.setClearWorkoutFocus(true);
+            } else {
+                descriptor.setWorkoutFocus(ParserUtil.parseWorkoutFocus(focusValue));
+            }
         }
         if (argMultimap.getValue(PREFIX_REMARK).isPresent()) {
-            descriptor.setRemark(ParserUtil.parseRemark(
-                    argMultimap.getValue(PREFIX_REMARK).get()));
+            String remarkValue = argMultimap.getValue(PREFIX_REMARK).get().trim();
+            if (remarkValue.isEmpty()) {
+                descriptor.setClearRemark(true);
+            } else {
+                descriptor.setRemark(ParserUtil.parseRemark(remarkValue));
+            }
         }
         if (argMultimap.getValue(PREFIX_VALIDITY).isPresent()) {
-            descriptor.setValidity(ParserUtil.parseValidity(
-                    argMultimap.getValue(PREFIX_VALIDITY).get()));
+            String validityValue = argMultimap.getValue(PREFIX_VALIDITY).get().trim();
+            if (validityValue.isEmpty()) {
+                descriptor.setClearValidity(true);
+            } else {
+                descriptor.setValidity(ParserUtil.parseValidity(validityValue));
+            }
         }
 
         if (!descriptor.isAnyFieldEdited()) {
