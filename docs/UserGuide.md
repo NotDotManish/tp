@@ -95,7 +95,7 @@ This guide is written for **gym managers and administrators** who want a fast, k
    | 1 | `list-trainers` | View all trainers |
    | 2 | `add-trainer n/John Doe p/98765432 e/johndoe@example.com` | Add a new trainer |
    | 3 | `list-trainers` | Confirm the trainer was added |
-   | 4 | `add-client n/Alice Lim p/81234567 t/1 [v/2028-09-09]` | Assign a client to trainer #1 |
+   | 4 | `add-client n/Alice Lim p/81234567 t/1 v/2028-09-09` | Assign a client to trainer #1 |
    | 5 | `find-clients Alice` | Search for the client you just added |
    | 6 | `delete-client 1` | Delete the 1st client in the current list |
    | 7 | `clear` | Delete all data |

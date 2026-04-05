@@ -27,7 +27,7 @@ import seedu.address.model.tag.Tag;
 
 public class JsonAdaptedPersonTest {
     private static final String INVALID_NAME = "R@chel";
-    private static final String INVALID_PHONE = "+651234";
+    private static final String INVALID_PHONE = "+65 1234a";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_TAG = "#friend";
     private static final String INVALID_WORKOUT_FOCUS = "Chest!";
@@ -218,6 +218,13 @@ public class JsonAdaptedPersonTest {
         JsonAdaptedPerson person = new JsonAdaptedPerson("unknown", VALID_NAME, VALID_PHONE, null,
                 null, null, 0, 0, null, null, null, VALID_TAGS);
         assertThrows(IllegalValueException.class, JsonAdaptedPerson.INVALID_TYPE_MESSAGE_FORMAT, person::toModelType);
+    }
+
+    @Test
+    public void toModelType_pastValidity_throwsIllegalValueException() {
+        JsonAdaptedPerson person = new JsonAdaptedPerson("client", VALID_CLIENT_NAME, VALID_CLIENT_PHONE, null,
+                VALID_TRAINER_PHONE, VALID_TRAINER_NAME, 0, 0, null, null, "2000-01-01", VALID_TAGS);
+        assertThrows(IllegalValueException.class, Validity.MESSAGE_PAST_DATE, person::toModelType);
     }
 
     private static class UnknownPerson extends Person {

@@ -2,8 +2,8 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_VALIDITY;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import seedu.address.commons.core.index.Index;
@@ -31,6 +31,8 @@ public class SetValidityCommand extends Command {
             + PREFIX_VALIDITY + "2026-12-31";
 
     public static final String MESSAGE_SET_VALIDITY_SUCCESS = "Set Validity to: %1$s for Client: %2$s";
+    public static final String MESSAGE_SET_VALIDITY_PAST_DATE_WARNING =
+            " (Warning: this date is in the past — membership is already expired!)";
     public static final String MESSAGE_INVALID_CLIENT = "The provided index does not correspond to a Client.";
 
     private final Index index;
@@ -67,8 +69,12 @@ public class SetValidityCommand extends Command {
         Client updatedClient = clientToEdit.withValidity(validity);
 
         model.setPerson(clientToEdit, updatedClient);
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_SET_VALIDITY_SUCCESS, validity, clientToEdit.getName()));
+        String successMessage = String.format(MESSAGE_SET_VALIDITY_SUCCESS, validity, clientToEdit.getName());
+        LocalDate parsedDate = LocalDate.parse(validity.value);
+        if (parsedDate.isBefore(LocalDate.now())) {
+            successMessage += MESSAGE_SET_VALIDITY_PAST_DATE_WARNING;
+        }
+        return new CommandResult(successMessage);
     }
 
     @Override
