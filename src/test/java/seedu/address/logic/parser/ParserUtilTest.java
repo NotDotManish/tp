@@ -181,6 +181,11 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseValidity_pastDate_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseValidity("2000-01-01"));
+    }
+
+    @Test
     public void parseValidity_validValueWithoutWhitespace_returnsValidity() throws Exception {
         seedu.address.model.person.Validity expectedValidity = new seedu.address.model.person.Validity("2026-12-31");
         assertEquals(expectedValidity, ParserUtil.parseValidity("2026-12-31"));

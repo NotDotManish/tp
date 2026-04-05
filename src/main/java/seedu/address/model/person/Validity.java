@@ -14,6 +14,7 @@ import java.time.format.DateTimeParseException;
 public class Validity {
 
     public static final String MESSAGE_CONSTRAINTS = "Validity should be a valid date in the format YYYY-MM-DD.";
+    public static final String MESSAGE_PAST_DATE = "Validity date must not be in the past.";
 
     public final String value;
 
