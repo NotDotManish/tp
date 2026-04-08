@@ -1,0 +1,41 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor MODEL_COLOR
+skinparam classBackgroundColor MODEL_COLOR
+
+show Client members
+
+Class "{abstract}\nPerson" as Person
+Class Trainer
+Class Client {
+  trainerPhone : Phone
+  trainerName : Name
+  calorieTarget : int
+  calorieIntake : int
+}
+Class Name
+Class Phone
+Class Email
+Class Tag
+Class WorkoutFocus
+Class Remark
+Class Validity
+
+Trainer -up-|> Person
+Client -up-|> Person
+
+Person *--> Name
+Person *--> Phone
+Person *--> "*" Tag
+
+Trainer *--> Email
+
+Client *--> "0..1" WorkoutFocus
+Client *--> "0..1" Remark
+Client *--> "0..1" Validity
+
+Name -[hidden]right-> Phone
+Phone -[hidden]right-> Email
+
+@enduml

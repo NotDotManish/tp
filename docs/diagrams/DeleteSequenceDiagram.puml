@@ -17,12 +17,11 @@ end box
 [-> LogicManager : execute("delete c/1")
 activate LogicManager
 
-LogicManager -> GymOpsParser : parseCommand("delete c/1")
 LogicManager -> AddressBookParser : parseCommand("delete c/1")
 activate AddressBookParser
 
 create DeleteCommandParser
-GymOpsParser -> DeleteCommandParser
+AddressBookParser -> DeleteCommandParser
 activate DeleteCommandParser
 
 DeleteCommandParser --> AddressBookParser

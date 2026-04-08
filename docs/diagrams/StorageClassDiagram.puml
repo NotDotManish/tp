@@ -15,9 +15,9 @@ Class "<<interface>>\nStorage" as Storage
 Class StorageManager
 
 package "GymOps Storage" #F4F6F6{
-Class "<<interface>>\nGymOpsStorage" as GymOpsStorage
-Class JsonGymOpsStorage
-Class JsonSerializableGymOps
+Class "<<interface>>\nAddressBookStorage" as AddressBookStorage
+Class JsonAddressBookStorage
+Class JsonSerializableAddressBook
 Class JsonAdaptedPerson
 Class JsonAdaptedTag
 }
@@ -29,15 +29,15 @@ HiddenOutside ..> Storage
 
 StorageManager .up.|> Storage
 StorageManager -up-> "1" UserPrefsStorage
-StorageManager -up-> "1" GymOpsStorage
+StorageManager -up-> "1" AddressBookStorage
 
 Storage -left-|> UserPrefsStorage
-Storage -right-|> GymOpsStorage
+Storage -right-|> AddressBookStorage
 
 JsonUserPrefsStorage .up.|> UserPrefsStorage
-JsonGymOpsStorage .up.|> GymOpsStorage
-JsonGymOpsStorage ..> JsonSerializableGymOps
-JsonSerializableGymOps --> "*" JsonAdaptedPerson
+JsonAddressBookStorage .up.|> AddressBookStorage
+JsonAddressBookStorage ..> JsonSerializableAddressBook
+JsonSerializableAddressBook --> "*" JsonAdaptedPerson
 JsonAdaptedPerson --> "*" JsonAdaptedTag
 
 @enduml

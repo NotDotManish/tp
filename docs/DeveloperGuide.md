@@ -215,6 +215,10 @@ The UI shows two lists by filtering that single list using `instanceof` checks i
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:** When implementing a command that takes an index, be explicit about which filtered list it indexes into (trainer list vs client list) to avoid subtle UI/index mismatches.
 </div>
 
+The class diagram below shows the entity hierarchy and the fields each type owns:
+
+<img src="images/TrainerClientClassDiagram.png" width="600" />
+
 #### Identity and uniqueness rules
 
 Uniqueness is enforced by `UniquePersonList` via `Person#isSamePerson(...)`. Because `Trainer` and `Client` override this method differently, GymOps has type-specific identity rules:
@@ -1050,6 +1054,25 @@ The use cases below cover the user stories in the table above. Use cases that ar
     Use case ends.
 
 
+**Use case: View trainer statistics**
+
+**MSS**
+
+1. Supervisor issues the `stats` command.
+2. GymOps counts the number of clients assigned to each trainer.
+3. GymOps sorts the trainer list by client count (descending, ties broken by trainer name) and displays it.
+
+   Use case ends.
+
+**Extensions**
+
+* 2a. There are no trainers.
+
+  * 2a1. GymOps shows an empty trainer list.
+
+    Use case ends.
+
+
 **Use case: Delete a client**
 
 **MSS**
@@ -1580,7 +1603,7 @@ GymOps is built on top of the AddressBook-Level3 (AB3) codebase. This allowed th
 Team size: 5
 
 1. Allow storing past membership validity dates and visually highlight expired validity dates in the client card.
-2. Unify index conventions for client-attribute commands (accept a consistent `c/INDEX` format across `remark`, `set-calorie-target`, `log-calorie`, `set-validity`, and `set-focus`).
+2. Add a `c/` index prefix to client-attribute commands that currently accept a plain `INDEX`, so that all client-attribute commands uniformly require `c/INDEX` instead of a bare index number.
 3. Improve `delete` failure messages to be more specific about the failed target (trainer/client) and failure reason (e.g., trainer still has assigned clients).
 4. Improve `import` error reporting to pinpoint which field/entry is invalid (instead of a generic “failed to import”).
 5. Improve `export`/`import` UX by suggesting a correct relative path when users provide an invalid one.

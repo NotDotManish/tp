@@ -4,6 +4,8 @@ skinparam arrowThickness 1.1
 skinparam arrowColor MODEL_COLOR
 skinparam classBackgroundColor MODEL_COLOR
 
+show Client members
+
 Package Model as ModelPackage <<Rectangle>>{
 Class "<<interface>>\nReadOnlyAddressBook" as ReadOnlyAddressBook
 Class "<<interface>>\nReadOnlyUserPrefs" as ReadOnlyUserPrefs
@@ -14,7 +16,10 @@ Class UserPrefs
 
 Class UniquePersonList
 Class "{abstract}\nPerson" as Person
-Class Client
+Class Client {
+  calorieTarget : int
+  calorieIntake : int
+}
 Class Trainer
 Class Email
 Class Name
