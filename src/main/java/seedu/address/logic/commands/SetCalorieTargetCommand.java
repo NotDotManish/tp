@@ -20,7 +20,7 @@ import seedu.address.model.person.Person;
  */
 public class SetCalorieTargetCommand extends Command {
 
-    public static final String COMMAND_WORD = "set-calorie-target";
+    public static final String COMMAND_WORD = "set-cal";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Sets the daily calorie target for the client identified by the index"

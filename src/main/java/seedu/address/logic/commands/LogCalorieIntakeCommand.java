@@ -21,7 +21,7 @@ import seedu.address.model.person.Person;
  */
 public class LogCalorieIntakeCommand extends Command {
 
-    public static final String COMMAND_WORD = "log-calorie";
+    public static final String COMMAND_WORD = "log-cal";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Logs calorie intake for the client identified by the index"
