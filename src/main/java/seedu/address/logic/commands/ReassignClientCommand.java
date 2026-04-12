@@ -19,7 +19,7 @@ import seedu.address.model.person.Trainer;
  */
 public class ReassignClientCommand extends Command {
 
-    public static final String COMMAND_WORD = "reassign-client";
+    public static final String COMMAND_WORD = "reassign-c";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Reassigns a client to a different trainer.\n"

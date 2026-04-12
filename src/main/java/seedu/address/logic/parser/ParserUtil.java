@@ -114,6 +114,21 @@ public class ParserUtil {
     }
 
     /**
+     * Parses a {@code String calories} into a non-negative {@code int} calorie target.
+     * Accepts 0 (meaning "not set") or any positive integer.
+     *
+     * @throws ParseException if the given {@code calories} is not a non-negative integer.
+     */
+    public static int parseCalorieTarget(String calories) throws ParseException {
+        requireNonNull(calories);
+        String trimmed = calories.trim();
+        if (!trimmed.equals("0") && !StringUtil.isNonZeroUnsignedInteger(trimmed)) {
+            throw new ParseException("Calorie target must be a non-negative integer (use 0 to clear).");
+        }
+        return Integer.parseInt(trimmed);
+    }
+
+    /**
      * Parses {@code Collection<String> tags} into a {@code Set<Tag>}.
      */
     public static Set<Tag> parseTags(Collection<String> tags) throws ParseException {

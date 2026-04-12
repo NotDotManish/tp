@@ -14,7 +14,7 @@ import seedu.address.model.person.Trainer;
  */
 public class AddTrainerCommand extends Command {
 
-    public static final String COMMAND_WORD = "add-trainer";
+    public static final String COMMAND_WORD = "add-t";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a trainer to the gym's roster. "
             + "Parameters: "

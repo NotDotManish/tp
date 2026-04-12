@@ -33,7 +33,7 @@ import seedu.address.model.person.exceptions.DuplicatePersonException;
  */
 public class EditClientCommand extends Command {
 
-    public static final String COMMAND_WORD = "edit-client";
+    public static final String COMMAND_WORD = "edit-c";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Edits the details of the client identified "

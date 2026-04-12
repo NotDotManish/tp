@@ -334,12 +334,12 @@ To keep the text readable, the flow is split into two smaller sequence diagrams.
 
 Other client attribute commands follow the same flow, with small differences:
 
-* `edit-client INDEX [cal/CALORIES] [f/FOCUS] [r/REMARK] [v/VALIDITY]` updates multiple client-only fields in one command.
+* `edit-c INDEX [cal/CALORIES] [f/FOCUS] [r/REMARK] [v/VALIDITY]` updates multiple client-only fields in one command.
    * For `f/`, `r/`, and `v/`, providing an empty value (e.g., `f/`) clears the corresponding optional field.
 * `remark INDEX r/REMARK` updates `Client#remark`.
-* `set-calorie-target INDEX cal/CALORIES` updates `Client#calorieTarget`.
-* `log-calorie INDEX cal/CALORIES` adds to `Client#calorieIntake` rather than overwriting it.
-* `reassign-client CLIENT_INDEX t/TRAINER_INDEX` reads both the filtered client list and filtered trainer list and updates `trainerPhone` + `trainerName`.
+* `set-cal c/INDEX cal/CALORIES` updates `Client#calorieTarget`. Use `cal/0` to clear the target.
+* `log-cal c/INDEX cal/CALORIES` adds to `Client#calorieIntake` rather than overwriting it.
+* `reassign-c CLIENT_INDEX t/TRAINER_INDEX` reads both the filtered client list and filtered trainer list and updates `trainerPhone` + `trainerName`.
 * `set-validity INDEX v/YYYY-MM-DD` updates `Client#validity`.
 
 #### Filtering Behaviour
@@ -350,7 +350,7 @@ As a result, the same client can have different indices depending on:
 * whether a trainer is currently selected (client list filtering), and
 * whether the user has applied `find-clients`.
 
-For `reassign-client`, the `CLIENT_INDEX` is resolved from the displayed client list and the `t/TRAINER_INDEX` is resolved from the displayed trainer list.
+For `reassign-c`, the `CLIENT_INDEX` is resolved from the displayed client list and the `t/TRAINER_INDEX` is resolved from the displayed trainer list.
 
 <div markdown="span" class="alert alert-warning">:warning: **Warning:** Filtering/selection means indices are *contextual*. A command that looks correct against the full list can target the wrong record if a `find-*` filter or selected-trainer filter is active.
 </div>
@@ -379,10 +379,10 @@ GymOps updates the client’s workout focus, persists the change, and the UI upd
 Step 3. The supervisor records an operational note using `remark 1 r/Recovering from ACL surgery`.
 GymOps overwrites any existing remark and updates the client card.
 
-Step 4. The supervisor sets a daily calorie target using `set-calorie-target 1 cal/2000`.
-GymOps updates the target and persists the change.
+Step 4. The supervisor sets a daily calorie target using `set-cal c/1 cal/2000`.
+GymOps updates the target and persists the change. To clear the target later, run `set-cal c/1 cal/0`.
 
-Step 5. The supervisor logs calorie intake throughout the day using `log-calorie 1 cal/500`.
+Step 5. The supervisor logs calorie intake throughout the day using `log-cal c/1 cal/500`.
 GymOps adds the new amount to the existing intake total.
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** The current version does not automatically reset intake totals by date.
@@ -853,7 +853,7 @@ The use cases below cover the user stories in the table above. Use cases that ar
 2.  GymOps shows a list of clients with index numbers.
 3.  Supervisor requests to list trainers.
 4.  GymOps shows a list of trainers with index numbers.
-5.  Supervisor issues the command to reassign a client to a new trainer (e.g., `reassign-client 2 t/1`).
+5.  Supervisor issues the command to reassign a client to a new trainer (e.g., `reassign-c 2 t/1`).
 6.  GymOps validates the input and updates the client’s assigned trainer.
 
    Use case ends.
@@ -1231,7 +1231,7 @@ The use cases below cover the user stories in the table above. Use cases that ar
 
 #### Performance
 
-1.  For a dataset of up to 100 trainers and 1000 clients, typical commands (e.g., `list`, `find`, `add-trainer`, `add-client`, `delete`, `set-calorie-target`, `log-calorie`, `set-focus`, `remark`) should complete within 1 second on a typical laptop.
+1.  For a dataset of up to 100 trainers and 1000 clients, typical commands (e.g., `list`, `find`, `add-t`, `add-c`, `delete`, `set-cal`, `log-cal`, `set-focus`, `remark`) should complete within 1 second on a typical laptop.
 
 #### Portability
 
@@ -1331,10 +1331,10 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: List trainers using `list-trainers` and note a trainer that has assigned clients.
 
-   1. Test case: `edit-trainer 1 n/Alex Tan`<br>
+   1. Test case: `edit-t 1 n/Alex Tan`<br>
       Expected: Trainer at index 1 shows the updated name.
 
-   1. Test case: `edit-trainer 1 p/99998888`<br>
+   1. Test case: `edit-t 1 p/99998888`<br>
       Expected: Trainer at index 1 shows the updated phone.
       Also expected: Clients previously assigned to this trainer remain assigned (their stored trainer reference is updated to match the edited trainer).
 
@@ -1342,13 +1342,13 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: List clients using `list-clients`.
 
-   1. Test case: `edit-client 1 n/Bob Lim p/98765432 t/1 cal/2000 f/Upper Body r/Note v/2027-01-01`<br>
+   1. Test case: `edit-c 1 n/Bob Lim p/98765432 t/1 cal/2000 f/Upper Body r/Note v/2027-01-01`<br>
       Expected: Client at index 1 shows updated details (including the optional fields).
 
-   1. Test case: `edit-client 1 f/ r/ v/`<br>
+   1. Test case: `edit-c 1 f/ r/ v/`<br>
       Expected: Client at index 1 has workout focus, remark, and validity cleared (removed from the client card display).
 
-   1. Other incorrect edit commands to try: `edit-trainer`, `edit-client`, `edit-client x n/Alice`, `edit-client 1 v/2000-01-01`<br>
+   1. Other incorrect edit commands to try: `edit-t`, `edit-c`, `edit-c x n/Alice`, `edit-c 1 v/2000-01-01`<br>
       Expected: Error shown indicating invalid command format or invalid values.
 
 ### Deleting a trainer/client
@@ -1420,14 +1420,14 @@ testers are expected to do more *exploratory* testing.
 
 1. Adding a trainer
 
-   1. Test case: `add-trainer n/Alex Tan p/91234567 e/alex@example.com`<br>
+   1. Test case: `add-t n/Alex Tan p/91234567 e/alex@example.com`<br>
       Expected: A new trainer appears in the trainer list.
 
 1. Adding a client
 
    1. Prerequisites: Ensure there is at least one trainer in the displayed trainer list.
 
-   1. Test case: `add-client n/Bob Lim p/98765432 t/1 v/2026-12-31`<br>
+   1. Test case: `add-c n/Bob Lim p/98765432 t/1 v/2026-12-31`<br>
       Expected: A new client appears in the client list and is assigned to trainer #1.
 
 ### Reassigning a client
@@ -1436,7 +1436,7 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: Ensure there are at least 2 trainers and at least 1 client in the displayed lists.
 
-   1. Test case: `reassign-client 1 t/2`<br>
+   1. Test case: `reassign-c 1 t/2`<br>
       Expected: Client at index 1 shows their trainer updated to trainer #2.
 
 ### Calorie tracking
@@ -1445,14 +1445,17 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: Ensure the displayed client list contains at least one client.
 
-   1. Test case: `set-calorie-target 1 cal/2000`<br>
+   1. Test case: `set-cal c/1 cal/2000`<br>
       Expected: The client card shows a calorie target (and a progress bar).
+
+   1. Test case: `set-cal c/1 cal/0`<br>
+      Expected: The calorie target is cleared for the 1st client.
 
 1. Logging calorie intake
 
    1. Prerequisites: Ensure the displayed client list contains at least one client.
 
-   1. Test case: `log-calorie 1 cal/500`<br>
+   1. Test case: `log-cal c/1 cal/500`<br>
       Expected: The client card shows an updated calorie intake total.
 
 ### Setting workout focus
@@ -1581,7 +1584,7 @@ GymOps is built on top of the AddressBook-Level3 (AB3) codebase. This allowed th
 ### Difficulty & Challenges
 
 * **Two list-centric entity types**: GymOps manages both trainers and clients as first-class entities, which increases complexity around filtering, index-based commands, and keeping UI lists consistent.
-* **Cross-list operations**: Commands such as `reassign-client` and `edit-client ... t/TRAINER_INDEX` resolve indices from different displayed lists, so correctness depends on clearly-defined “index is based on the current filtered list” behavior.
+* **Cross-list operations**: Commands such as `reassign-c` and `edit-c ... t/TRAINER_INDEX` resolve indices from different displayed lists, so correctness depends on clearly-defined “index is based on the current filtered list” behavior.
 * **Data integrity constraints**: Clients are assigned to exactly one trainer, and deleting trainers must respect this constraint (e.g., reject deletion if the trainer still has active clients).
 * **Persistence and compatibility**: Import/export and JSON storage need to persist all relevant fields, handle optional client attributes, and remain resilient to malformed or inconsistent data.
 * **Documentation accuracy**: Because behavior depends on filtered lists and selection state (e.g., `list-clients INDEX` selecting a trainer), documenting usage precisely required careful alignment with the implementation.

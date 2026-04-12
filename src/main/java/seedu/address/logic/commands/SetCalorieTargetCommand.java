@@ -27,11 +27,13 @@ public class SetCalorieTargetCommand extends Command {
             + " number used in the displayed client list.\n"
             + "Parameters: "
             + PREFIX_CLIENT + "CLIENT_INDEX "
-            + PREFIX_CALORIE + "CALORIES (must be a positive integer)\n"
+            + PREFIX_CALORIE + "CALORIES (must be a non-negative integer; use 0 to clear the target)\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_CLIENT + "1 " + PREFIX_CALORIE + "2000";
 
     public static final String MESSAGE_SET_CALORIE_TARGET_SUCCESS =
             "Set calorie target for %1$s: %2$d kcal/day";
+    public static final String MESSAGE_CLEAR_CALORIE_TARGET_SUCCESS =
+            "Calorie target cleared for %1$s";
     public static final String MESSAGE_NOT_A_CLIENT =
             "The person at the specified index is not a Client.";
 
@@ -69,8 +71,10 @@ public class SetCalorieTargetCommand extends Command {
         Client updatedClient = clientToEdit.withCalorieTarget(calorieTarget);
 
         model.setPerson(clientToEdit, updatedClient);
-        return new CommandResult(String.format(MESSAGE_SET_CALORIE_TARGET_SUCCESS,
-                updatedClient.getName(), calorieTarget));
+        String successMsg = calorieTarget == 0
+                ? String.format(MESSAGE_CLEAR_CALORIE_TARGET_SUCCESS, updatedClient.getName())
+                : String.format(MESSAGE_SET_CALORIE_TARGET_SUCCESS, updatedClient.getName(), calorieTarget);
+        return new CommandResult(successMsg);
     }
 
     @Override

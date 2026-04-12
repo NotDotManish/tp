@@ -26,7 +26,7 @@ import seedu.address.model.person.Validity;
  */
 public class AddClientCommand extends Command {
 
-    public static final String COMMAND_WORD = "add-client";
+    public static final String COMMAND_WORD = "add-c";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a new client and assigns them to a trainer.\n"
             + "Parameters: "

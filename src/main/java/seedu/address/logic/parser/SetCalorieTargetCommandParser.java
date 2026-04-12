@@ -41,7 +41,7 @@ public class SetCalorieTargetCommandParser implements Parser<SetCalorieTargetCom
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, SetCalorieTargetCommand.MESSAGE_USAGE), pe);
         }
 
-        int calorieTarget = ParserUtil.parseCalories(argMultimap.getValue(PREFIX_CALORIE).get());
+        int calorieTarget = ParserUtil.parseCalorieTarget(argMultimap.getValue(PREFIX_CALORIE).get());
 
         return new SetCalorieTargetCommand(index, calorieTarget);
     }

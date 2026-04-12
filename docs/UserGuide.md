@@ -45,16 +45,16 @@ This guide is written for **gym managers and administrators** who want a fast, k
     - [Saving data](#saving-data)
     - [Editing the data file](#editing-the-data-file)
   - [Trainer Management](#trainer-management)
-    - [Adding a trainer](#adding-a-trainer-add-trainer)
-    - [Editing a trainer](#editing-a-trainer-edit-trainer)
+    - [Adding a trainer](#adding-a-trainer-add-t)
+    - [Editing a trainer](#editing-a-trainer-edit-t)
     - [Listing all trainers](#listing-all-trainers-list-trainers)
     - [Finding trainers](#finding-trainers-find-trainers)
     - [Viewing trainer statistics](#viewing-trainer-statistics-stats)
     - [Deleting a trainer](#deleting-a-trainer-delete-trainer)
   - [Client Management](#client-management)
-    - [Adding a client](#adding-a-client-add-client)
-    - [Editing a client](#editing-a-client-edit-client)
-    - [Reassigning a client](#reassigning-a-client-reassign-client)
+    - [Adding a client](#adding-a-client-add-c)
+    - [Editing a client](#editing-a-client-edit-c)
+    - [Reassigning a client](#reassigning-a-client-reassign-c)
     - [Listing clients](#listing-clients-list-clients)
     - [Finding clients](#finding-clients-find-clients)
     - [Deleting a client](#deleting-a-client-delete-client)
@@ -99,9 +99,9 @@ This guide is written for **gym managers and administrators** who want a fast, k
    | Step | Command | What it does |
    |------|---------|-------------|
    | 1 | `list-trainers` | View all trainers |
-   | 2 | `add-trainer n/John Doe p/98765432 e/johndoe@example.com` | Add a new trainer |
+   | 2 | `add-t n/John Doe p/98765432 e/johndoe@example.com` | Add a new trainer |
    | 3 | `list-trainers` | Confirm the trainer was added |
-   | 4 | `add-client n/Alice Lim p/81234567 t/1 v/2028-09-09` | Assign a client to trainer #1 |
+   | 4 | `add-c n/Alice Lim p/81234567 t/1 v/2028-09-09` | Assign a client to trainer #1 |
    | 5 | `find-clients Alice` | Search for the client you just added |
    | 6 | `delete-client 1` | Delete the 1st client in the current list |
    | 7 | `clear` | Delete all data |
@@ -117,7 +117,7 @@ This guide is written for **gym managers and administrators** who want a fast, k
 
 **:information_source: Notes about the command format:**
 
-- Words in `UPPER_CASE` are parameters you supply. e.g. in `add-trainer n/NAME`, replace `NAME` with the actual name: `add-trainer n/John Doe`.
+- Words in `UPPER_CASE` are parameters you supply. e.g. in `add-t n/NAME`, replace `NAME` with the actual name: `add-t n/John Doe`.
 - Items in square brackets are optional. e.g. `find KEYWORD [MORE_KEYWORDS]` can be used as `find alice` or `find alice bob`.
 - Parameters can be in any order. e.g. `n/NAME p/PHONE_NUMBER` and `p/PHONE_NUMBER n/NAME` are both valid.
 - Extraneous parameters for commands that take no parameters (such as `help`, `list`, `exit`, and `clear`) will be ignored.
@@ -153,9 +153,9 @@ Format: `help`
 
 Shows all trainers and all clients.
 
-This command resets both lists to show all entries by:
-- clearing any active `find` filters, and
-- clearing any trainer selection made via the GUI (i.e. if you clicked a trainer to filter clients).
+This command resets both lists to show all entries by clearing any active `find` filters.
+
+<div markdown="span" class="alert alert-info">:bulb: **Tip:** To also clear a trainer selection made via the GUI, run `list-clients` (without an index) after `list`.</div>
 
 Format: `list`
 
@@ -299,14 +299,14 @@ Data is saved as a JSON file at `[JAR file location]/data/GymOps.json`. Advanced
 
 ### Trainer Management
 
-#### Adding a trainer: `add-trainer`
+#### Adding a trainer: `add-t`
 
 Adds a new trainer to GymOps.
 
-Format: `add-trainer n/NAME p/PHONE_NUMBER e/EMAIL`
+Format: `add-t n/NAME p/PHONE_NUMBER e/EMAIL`
 
 Examples:
-* `add-trainer n/John Doe p/98765432 e/johndoe@example.com`
+* `add-t n/John Doe p/98765432 e/johndoe@example.com`
 
 ![add trainer](images/addTrainer.png)
 **Expected outcome:** The new trainer is added to the **Trainers** panel, and a success message is displayed.
@@ -315,11 +315,11 @@ Examples:
 
 ---
 
-#### Editing a trainer: `edit-trainer`
+#### Editing a trainer: `edit-t`
 
 Edits the details of an existing trainer in GymOps. Use this command to update a trainer's name, phone number, or email address.
 
-Format: `edit-trainer INDEX [n/NAME] [p/PHONE] [e/EMAIL]`
+Format: `edit-t INDEX [n/NAME] [p/PHONE] [e/EMAIL]`
 
 * `INDEX` must be a positive integer.
 * At least one optional field must be provided.
@@ -328,8 +328,8 @@ Format: `edit-trainer INDEX [n/NAME] [p/PHONE] [e/EMAIL]`
 <div markdown="span" class="alert alert-info">:bulb: **Tip:** Run `list-trainers` to confirm the correct trainer index before editing.</div>
 
 Examples:
-* `edit-trainer 1 e/johndoe@gym.com` — updates the 1st trainer's email.
-* `edit-trainer 2 n/Jane Doe p/92222222` — updates the 2nd trainer's name and phone.
+* `edit-t 1 e/johndoe@gym.com` — updates the 1st trainer's email.
+* `edit-t 2 n/Jane Doe p/92222222` — updates the 2nd trainer's name and phone.
 
 ![edit trainer](images/editTrainer.png)
 
@@ -404,11 +404,11 @@ Examples:
 
 ### Client Management
 
-#### Adding a client: `add-client`
+#### Adding a client: `add-c`
 
 Adds a new client and assigns them to an existing trainer.
 
-Format: `add-client n/NAME p/PHONE_NUMBER t/TRAINER_INDEX [v/VALIDITY]`
+Format: `add-c n/NAME p/PHONE_NUMBER t/TRAINER_INDEX [v/VALIDITY]`
 
 * `TRAINER_INDEX` must refer to a trainer visible in the **current trainer list**.
 * `VALIDITY` is an optional field that must be a valid date in the format `YYYY-MM-DD`. e.g. `v/2028-09-09`. Using a wrong format such as `v/09-09-2028` will show: `Validity should be a valid date in the format YYYY-MM-DD.`
@@ -418,8 +418,8 @@ Format: `add-client n/NAME p/PHONE_NUMBER t/TRAINER_INDEX [v/VALIDITY]`
 <div markdown="span" class="alert alert-info">:bulb: **Tip:** Run `list-trainers` to confirm the correct trainer index before adding a client.</div>
 
 Examples:
-* `add-client n/Alice Lim p/81234567 t/1` — adds Alice Lim and assigns her to the 1st trainer in the list.
-* `add-client n/Alice Lim p/81234567 t/1 v/2028-09-09` — adds Alice Lim, assigns her to the 1st trainer, and sets her membership validity to 2028-09-09.
+* `add-c n/Alice Lim p/81234567 t/1` — adds Alice Lim and assigns her to the 1st trainer in the list.
+* `add-c n/Alice Lim p/81234567 t/1 v/2028-09-09` — adds Alice Lim, assigns her to the 1st trainer, and sets her membership validity to 2028-09-09.
 
 ![add client](images/addClient.png)
 **Expected outcome:** The new client is assigned to the specified trainer, added to the **Clients** panel, and a success message is displayed.
@@ -428,11 +428,11 @@ Examples:
 
 ---
 
-#### Editing a client: `edit-client`
+#### Editing a client: `edit-c`
 
 Edits the details of an existing client in GymOps. Use this command to update a client's name, phone number, assigned trainer, calorie target, workout focus, remark, or membership validity.
 
-Format: `edit-client INDEX [n/NAME] [p/PHONE] [t/TRAINER_INDEX] [cal/CALORIE_TARGET] [f/FOCUS] [r/REMARK] [v/VALIDITY]`
+Format: `edit-c INDEX [n/NAME] [p/PHONE] [t/TRAINER_INDEX] [cal/CALORIE_TARGET] [f/FOCUS] [r/REMARK] [v/VALIDITY]`
 
 * `INDEX` must be a positive integer.
 * At least one optional field must be provided.
@@ -442,19 +442,19 @@ Format: `edit-client INDEX [n/NAME] [p/PHONE] [t/TRAINER_INDEX] [cal/CALORIE_TAR
 <div markdown="span" class="alert alert-info">:bulb: **Tip:** Run `list-clients` to confirm the correct client index before editing.</div>
 
 Examples:
-* `edit-client 1 n/Alice Tan` — updates the 1st client's name to Alice Tan.
-* `edit-client 2 p/91234567 cal/2000` — updates the 2nd client's phone and calorie target.
-* `edit-client 1 t/2 f/Arms` — reassigns the 1st client to trainer #2 and sets focus to Arms.
+* `edit-c 1 n/Alice Tan` — updates the 1st client's name to Alice Tan.
+* `edit-c 2 p/91234567 cal/2000` — updates the 2nd client's phone and calorie target.
+* `edit-c 1 t/2 f/Arms` — reassigns the 1st client to trainer #2 and sets focus to Arms.
 
 [⬆ Back to top](#top)
 
 ---
 
-#### Reassigning a client: `reassign-client`
+#### Reassigning a client: `reassign-c`
 
 Reassigns an existing client to a different trainer. All client data (calorie target, intake, workout focus, remark) is preserved.
 
-Format: `reassign-client CLIENT_INDEX t/TRAINER_INDEX`
+Format: `reassign-c CLIENT_INDEX t/TRAINER_INDEX`
 
 * `CLIENT_INDEX` must refer to a client in the **client list**.
 * `TRAINER_INDEX` must refer to a trainer visible in the **current trainer list**.
@@ -462,7 +462,7 @@ Format: `reassign-client CLIENT_INDEX t/TRAINER_INDEX`
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:** If either list is filtered, indexes refer to the filtered results. Run `list` first to reassign using the full lists.</div>
 
 Examples:
-* `reassign-client 2 t/1` — reassigns the 2nd client to the 1st trainer.
+* `reassign-c 2 t/1` — reassigns the 2nd client to the 1st trainer.
 
 ![reassign client](images/reassignClient.png)
 **Expected outcome:** The client's assigned trainer is updated while preserving all other data. A success message is displayed.
@@ -539,10 +539,11 @@ Sets the daily calorie target for a client.
 Format: `set-cal c/CLIENT_INDEX cal/CALORIES`
 
 * `CLIENT_INDEX` must refer to a client in the **client list**.
-* `CALORIES` must be a positive integer.
+* `CALORIES` must be a non-negative integer. Use `0` to clear the calorie target.
 
 Examples:
 * `set-cal c/1 cal/2400` — sets a 2400-calorie daily target for the 1st client.
+* `set-cal c/1 cal/0` — clears the calorie target for the 1st client.
 
 ![set calorie](images/setCalorieTarget.png)
 
@@ -700,11 +701,11 @@ There is currently no CLI command to assign tags. Tags can only be added by edit
 | Action | Format | Example |
 |--------|--------|---------|
 | [**Help**](#viewing-help-help) | `help` | — |
-| [**Add trainer**](#adding-a-trainer-add-trainer) | `add-trainer n/NAME p/PHONE_NUMBER e/EMAIL` | `add-trainer n/John Doe p/98765432 e/johndoe@example.com` |
-| [**Edit trainer**](#editing-a-trainer-edit-trainer) | `edit-trainer INDEX [n/NAME] [p/PHONE] [e/EMAIL]` | `edit-trainer 1 n/Jane Doe e/jane@example.com` |
-| [**Add client**](#adding-a-client-add-client) | `add-client n/NAME p/PHONE_NUMBER t/TRAINER_INDEX [v/VALIDITY]` | `add-client n/Alice Lim p/81234567 t/1 v/2028-09-09` |
-| [**Edit client**](#editing-a-client-edit-client) | `edit-client INDEX [n/NAME] [p/PHONE] [t/TRAINER_INDEX] [cal/CALORIE_TARGET] [f/FOCUS] [r/REMARK] [v/VALIDITY]` | `edit-client 1 n/Alice Tan p/91234567` |
-| [**Reassign client**](#reassigning-a-client-reassign-client) | `reassign-client CLIENT_INDEX t/TRAINER_INDEX` | `reassign-client 2 t/1` |
+| [**Add trainer**](#adding-a-trainer-add-t) | `add-t n/NAME p/PHONE_NUMBER e/EMAIL` | `add-t n/John Doe p/98765432 e/johndoe@example.com` |
+| [**Edit trainer**](#editing-a-trainer-edit-t) | `edit-t INDEX [n/NAME] [p/PHONE] [e/EMAIL]` | `edit-t 1 n/Jane Doe e/jane@example.com` |
+| [**Add client**](#adding-a-client-add-c) | `add-c n/NAME p/PHONE_NUMBER t/TRAINER_INDEX [v/VALIDITY]` | `add-c n/Alice Lim p/81234567 t/1 v/2028-09-09` |
+| [**Edit client**](#editing-a-client-edit-c) | `edit-c INDEX [n/NAME] [p/PHONE] [t/TRAINER_INDEX] [cal/CALORIE_TARGET] [f/FOCUS] [r/REMARK] [v/VALIDITY]` | `edit-c 1 n/Alice Tan p/91234567` |
+| [**Reassign client**](#reassigning-a-client-reassign-c) | `reassign-c CLIENT_INDEX t/TRAINER_INDEX` | `reassign-c 2 t/1` |
 | [**List all**](#listing-all-persons-list) | `list` | — |
 | [**List trainers**](#listing-all-trainers-list-trainers) | `list-trainers` | — |
 | [**List clients**](#listing-clients-list-clients) | `list-clients [TRAINER_INDEX]` | `list-clients`, `list-clients 1` |
@@ -712,7 +713,7 @@ There is currently no CLI command to assign tags. Tags can only be added by edit
 | [**Find (both lists)**](#finding-persons-find) | `find KEYWORD [MORE_KEYWORDS]` | `find James Jake` |
 | [**Find trainers**](#finding-trainers-find-trainers) | `find-trainers KEYWORD [MORE_KEYWORDS]` | `find-trainers John` |
 | [**Find clients**](#finding-clients-find-clients) | `find-clients KEYWORD [MORE_KEYWORDS]` | `find-clients Alice` |
-| [**Set calorie target**](#setting-a-calorie-target-set-cal) | `set-cal c/CLIENT_INDEX cal/CALORIES` | `set-cal c/1 cal/2400` |
+| [**Set calorie target**](#setting-a-calorie-target-set-cal) | `set-cal c/CLIENT_INDEX cal/CALORIES` | `set-cal c/1 cal/2400`, `set-cal c/1 cal/0` |
 | [**Log calorie intake**](#logging-calorie-intake-log-cal) | `log-cal c/CLIENT_INDEX cal/CALORIES` | `log-cal c/1 cal/1500` |
 | [**Set workout focus**](#setting-a-workout-focus-set-focus) | `set-focus c/CLIENT_INDEX f/FOCUS` | `set-focus c/1 f/Chest` |
 | [**Remark**](#adding-a-remark-remark) | `remark c/CLIENT_INDEX r/REMARK` | `remark c/1 r/Recovering from ACL surgery` |

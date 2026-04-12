@@ -50,12 +50,12 @@ public class SetCalorieTargetCommandParserTest {
     @Test
     public void parse_invalidCalories_throwsParseException() {
         assertParseFailure(parser, " " + PREFIX_CLIENT + "1 " + PREFIX_CALORIE + INVALID_CALORIES,
-                "Calories must be a positive integer.");
+                "Calorie target must be a non-negative integer (use 0 to clear).");
     }
 
     @Test
-    public void parse_zeroCalories_throwsParseException() {
-        assertParseFailure(parser, " " + PREFIX_CLIENT + "1 " + PREFIX_CALORIE + "0",
-                "Calories must be a positive integer.");
+    public void parse_zeroCalories_returnsSetCalorieTargetCommand() {
+        assertParseSuccess(parser, " " + PREFIX_CLIENT + "1 " + PREFIX_CALORIE + "0",
+                new SetCalorieTargetCommand(INDEX_FIRST_PERSON, 0));
     }
 }

@@ -26,7 +26,7 @@ import seedu.address.model.person.exceptions.DuplicatePersonException;
  */
 public class EditTrainerCommand extends Command {
 
-    public static final String COMMAND_WORD = "edit-trainer";
+    public static final String COMMAND_WORD = "edit-t";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Edits the details of the trainer identified "
