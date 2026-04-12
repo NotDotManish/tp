@@ -245,7 +245,9 @@ GymOps does not store a direct object reference from `Client` to a `Trainer` ins
 GymOps maintains referential consistency between `Client` and `Trainer` in a few key places:
 
 * **On load (storage)**: after JSON is converted into model objects, GymOps removes any `Client` whose `trainerPhone` does not match any existing `Trainer` phone in the loaded dataset.
-   This prevents the app from starting with inconsistent state if the JSON file is manually edited.
+   This prevents the app from starting with inconsistent state if the data file is corrupted or manually edited.
+
+<div markdown="span" class="alert alert-warning">:exclamation: **User note:** Editing the data file is possible but **not recommended**. Treat the JSON file as an internal persistence detail; prefer in-app commands (e.g., import/export) for data management. If manual edits are unavoidable (e.g., recovery), do it only while the app is closed and keep a backup first.</div>
 * **On trainer edits (model)**: when `Model#setPerson(target, editedPerson)` edits a trainer, `ModelManager` propagates changes by updating every client whose `trainerPhone` matches the original trainer.
    This keeps client assignment labels correct even if the trainer’s phone/name changes.
 * **On trainer deletion (logic)**: deleting a trainer is blocked if any client is still assigned to them.
@@ -1551,6 +1553,8 @@ testers are expected to do more *exploratory* testing.
 
 1. Dealing with missing/corrupted data files
 
+   <div markdown="span" class="alert alert-warning">:exclamation: **Note (testing only):** The steps below intentionally modify/delete the data file to simulate failure scenarios. They are meant for developer testing and should not be recommended to end users.</div>
+
    1. Missing file
 
       1. Prerequisites: Close the app.
@@ -1612,4 +1616,4 @@ Team size: 5
 7. Improve `stats` output to explicitly display the computed client counts per trainer in the command result message (in addition to sorting the list).
 8. Improve calorie tracking by optionally resetting calorie intake totals by date (while preserving a simple “today’s total” UX).
 9. Improve robustness of list-scoped commands under dynamic list changes by providing clearer guidance when indices become invalid after filtering.
-10. Improve error messages and data validation strictness for direct data file editing before boot.
+10. Improve error messages and data validation strictness for corrupted/externally modified data files on startup.

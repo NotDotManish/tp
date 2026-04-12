@@ -43,7 +43,7 @@ This guide is written for **gym managers and administrators** who want a fast, k
     - [Importing data](#importing-data-import)
     - [Exiting GymOps](#exiting-gymops-exit)
     - [Saving data](#saving-data)
-    - [Editing the data file](#editing-the-data-file)
+    - [Do not edit the data file](#do-not-edit-the-data-file)
   - [Trainer Management](#trainer-management)
     - [Adding a trainer](#adding-a-trainer-add-t)
     - [Editing a trainer](#editing-a-trainer-edit-t)
@@ -287,13 +287,12 @@ GymOps saves data automatically after every command that modifies it. No manual 
 
 ---
 
-#### Editing the data file
+#### Do not edit the data file
 
-Data is saved as a JSON file at `[JAR file location]/data/GymOps.json`. Advanced users may edit this file directly.
+Data is saved as a JSON file at `[JAR file location]/data/GymOps.json`.
+This file is **managed by GymOps** and is **not meant to be edited by hand**.
 
-<div markdown="span" class="alert alert-warning">:exclamation: **Caution:** If the file format becomes invalid, GymOps will start with an empty dataset on the next run. Back up the file before editing it. Certain edits may also cause GymOps to behave unexpectedly if values fall outside acceptable ranges.</div>
-
-<div markdown="span" class="alert alert-warning">:exclamation: **Caution (continued):** GymOps also treats some "valid JSON" as invalid data (e.g., duplicate entries such as a repeated phone number, or other constraint violations). In such cases, GymOps will start with an empty dataset for that run. The JSON file is not deleted automatically, but because GymOps auto-saves after successful commands, continuing to use the app may overwrite the data file. To preserve the data, fix/restore the JSON file while GymOps is closed, then restart.</div>
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:** Editing `GymOps.json` is possible but **strongly not recommended** unless you really need to (unlikely) and you know exactly what you are doing. Manual edits can corrupt your data or violate data constraints, causing GymOps to start with an empty dataset. GymOps also auto-saves after successful commands, so manual changes may be overwritten. Prefer `export`/`import` for backups and transfers. If you must edit the file, do it only while GymOps is **closed** and keep a backup copy first.</div>
 
 ---
 
@@ -631,34 +630,23 @@ Examples:
 
 [⬆ Back to top](#top)
 
-#### Advanced: assigning tags manually
-
-GymOps includes a tag system, but there is currently **no CLI command** to assign tags.
-Advanced users may still assign tags by editing the `tags` field in the data file.
-
-- Only edit the file while GymOps is **closed**. Otherwise, your changes may be overwritten when GymOps saves.
-- Tags must be **alphanumeric** (e.g., `vip`, `Trial2026`).
-- Each person entry can have a `tags` array. Example:
-
-   ```json
-   {
-      "type": "trainer",
-      "name": "Real Trainer",
-      "phone": "92222222",
-      "email": "real@trainer.com",
-      "tags": ["vip", "trial"]
-   }
-   ```
-
-If you enter an invalid tag (or break the JSON format), GymOps may fail to load the file and start with a fresh/empty dataset.
-
----
-
 ## FAQ
 
 **Q: How do I transfer my data to another computer?**
 
-Install GymOps on the other computer and replace the empty data file it creates with your existing data file from `[JAR file location]/data/GymOps.json`.
+Use `export` on the old computer and `import` on the new computer (recommended).
+
+If you prefer copying files directly, install GymOps on the other computer and replace the empty data file it creates with your existing `[JAR file location]/data/GymOps.json` **while GymOps is closed**. Do not edit the contents of the file.
+
+---
+
+**Q: I opened `GymOps.json` and saw a `tags` section. Can I edit it?**
+
+GymOps may contain fields in the data file that are **not exposed through the app’s UI/CLI** (e.g., legacy/internal fields such as `tags`).
+
+While you *can* edit the data file, it is **not recommended** unless you are doing a one-off recovery/migration and you understand the JSON format and constraints. A small mistake can prevent GymOps from loading your data.
+
+If your goal is to label or categorise people, use the supported in-app features instead. If you are trying to move/backup data, use `export`/`import`.
 
 ---
 
@@ -676,13 +664,7 @@ GymOps does not currently support an undo command. Before running destructive co
 
 **Q: Why does my calorie intake not reset to zero each day?**
 
-GymOps does not automatically reset daily calorie intake. You can reset a client's intake by running `log-cal` with a corrected cumulative total, or by editing the data file directly while GymOps is closed.
-
----
-
-**Q: Can I add tags via a command?**
-
-There is currently no CLI command to assign tags. Tags can only be added by editing the `tags` field in the data file directly (see [Editing the data file](#editing-the-data-file)). Only edit the file while GymOps is **closed**.
+GymOps does not automatically reset daily calorie intake. You can correct a client's displayed intake by running `log-cal` with the desired cumulative total.
 
 ---
 
