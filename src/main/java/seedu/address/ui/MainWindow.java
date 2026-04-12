@@ -256,7 +256,7 @@ public class MainWindow extends UiPart<Stage> {
 
     private void updateTrainerFilterLinkState() {
         boolean filtered = logic.isTrainerListFiltered();
-        trainerFilterLink.setDisable(!filtered);
+        trainerFilterLink.setDisable(false);
         trainerFilterLink.setText(filtered ? "Show All Trainers" : "Showing All");
     }
 

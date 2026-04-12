@@ -59,7 +59,7 @@
               <HBox alignment="CENTER_LEFT" spacing="10">
                 <Label text="Trainers" styleClass="label-bright" />
                 <Region HBox.hgrow="ALWAYS" />
-                <Hyperlink fx:id="trainerFilterLink" text="Showing All" disable="true" onAction="#handleListAllTrainers" styleClass="filter-link" />
+                <Hyperlink fx:id="trainerFilterLink" text="Showing All" onAction="#handleListAllTrainers" styleClass="filter-link" />
               </HBox>
               <StackPane fx:id="trainerListPanelPlaceholder" VBox.vgrow="ALWAYS" />
             </VBox>
