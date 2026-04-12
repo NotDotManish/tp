@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CALORIE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_CLIENT;
 
 import java.util.List;
 
@@ -19,14 +20,15 @@ import seedu.address.model.person.Person;
  */
 public class SetCalorieTargetCommand extends Command {
 
-    public static final String COMMAND_WORD = "set-calorie-target";
+    public static final String COMMAND_WORD = "set-cal";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Sets the daily calorie target for the client identified by the index"
             + " number used in the displayed client list.\n"
-            + "Parameters: INDEX (must be a positive integer) "
+            + "Parameters: "
+            + PREFIX_CLIENT + "CLIENT_INDEX "
             + PREFIX_CALORIE + "CALORIES (must be a positive integer)\n"
-            + "Example: " + COMMAND_WORD + " 1 " + PREFIX_CALORIE + "2000";
+            + "Example: " + COMMAND_WORD + " " + PREFIX_CLIENT + "1 " + PREFIX_CALORIE + "2000";
 
     public static final String MESSAGE_SET_CALORIE_TARGET_SUCCESS =
             "Set calorie target for %1$s: %2$d kcal/day";

@@ -59,8 +59,8 @@ This guide is written for **gym managers and administrators** who want a fast, k
     - [Finding clients](#finding-clients-find-clients)
     - [Deleting a client](#deleting-a-client-delete-client)
   - [Health Tracking](#health-tracking)
-    - [Setting a calorie target](#setting-a-calorie-target-set-calorie-target)
-    - [Logging calorie intake](#logging-calorie-intake-log-calorie)
+    - [Setting a calorie target](#setting-a-calorie-target-set-cal)
+    - [Logging calorie intake](#logging-calorie-intake-log-cal)
     - [Setting a workout focus](#setting-a-workout-focus-set-focus)
     - [Adding a remark](#adding-a-remark-remark)
     - [Setting a membership validity](#setting-a-membership-validity-set-validity)
@@ -532,17 +532,17 @@ Examples:
 
 ### Health Tracking
 
-#### Setting a calorie target: `set-calorie-target`
+#### Setting a calorie target: `set-cal`
 
 Sets the daily calorie target for a client.
 
-Format: `set-calorie-target INDEX cal/CALORIES`
+Format: `set-cal c/CLIENT_INDEX cal/CALORIES`
 
-* `INDEX` must refer to a client in the **client list**.
+* `CLIENT_INDEX` must refer to a client in the **client list**.
 * `CALORIES` must be a positive integer.
 
 Examples:
-* `set-calorie-target 1 cal/2400` — sets a 2400-calorie daily target for the 1st client.
+* `set-cal c/1 cal/2400` — sets a 2400-calorie daily target for the 1st client.
 
 ![set calorie](images/setCalorieTarget.png)
 
@@ -552,17 +552,17 @@ Examples:
 
 ---
 
-#### Logging calorie intake: `log-calorie`
+#### Logging calorie intake: `log-cal`
 
 Logs calorie intake for a client. Calories are added to the client's existing daily intake.
 
-Format: `log-calorie INDEX cal/CALORIES`
+Format: `log-cal c/CLIENT_INDEX cal/CALORIES`
 
-* `INDEX` must refer to a client in the **client list**.
+* `CLIENT_INDEX` must refer to a client in the **client list**.
 * `CALORIES` must be a positive integer.
 
 Examples:
-* `log-calorie 1 cal/1500` — adds 1500 calories to the 1st client's daily intake.
+* `log-cal c/1 cal/1500` — adds 1500 calories to the 1st client's daily intake.
 
 ![log calorie](images/logCalorie.png)
 
@@ -595,13 +595,13 @@ Examples:
 
 Adds a remark to a client. Overwrites any existing remark.
 
-Format: `remark INDEX r/REMARK`
+Format: `remark c/CLIENT_INDEX r/REMARK`
 
-* `INDEX` must refer to a client in the **client list**.
+* `CLIENT_INDEX` must refer to a client in the **client list**.
 * `REMARK` must not be empty.
 
 Examples:
-* `remark 1 r/Recovering from ACL surgery`
+* `remark c/1 r/Recovering from ACL surgery`
 
 ![remark](images/remark.png)
 **Expected outcome:** The client's remark is updated and displayed on their card. A success message is displayed.
@@ -675,7 +675,7 @@ GymOps does not currently support an undo command. Before running destructive co
 
 **Q: Why does my calorie intake not reset to zero each day?**
 
-GymOps does not automatically reset daily calorie intake. You can reset a client's intake by running `log-calorie` with a corrected cumulative total, or by editing the data file directly while GymOps is closed.
+GymOps does not automatically reset daily calorie intake. You can reset a client's intake by running `log-cal` with a corrected cumulative total, or by editing the data file directly while GymOps is closed.
 
 ---
 
@@ -712,10 +712,10 @@ There is currently no CLI command to assign tags. Tags can only be added by edit
 | [**Find (both lists)**](#finding-persons-find) | `find KEYWORD [MORE_KEYWORDS]` | `find James Jake` |
 | [**Find trainers**](#finding-trainers-find-trainers) | `find-trainers KEYWORD [MORE_KEYWORDS]` | `find-trainers John` |
 | [**Find clients**](#finding-clients-find-clients) | `find-clients KEYWORD [MORE_KEYWORDS]` | `find-clients Alice` |
-| [**Set calorie target**](#setting-a-calorie-target-set-calorie-target) | `set-calorie-target INDEX cal/CALORIES` | `set-calorie-target 1 cal/2400` |
-| [**Log calorie intake**](#logging-calorie-intake-log-calorie) | `log-calorie INDEX cal/CALORIES` | `log-calorie 1 cal/1500` |
+| [**Set calorie target**](#setting-a-calorie-target-set-cal) | `set-cal c/CLIENT_INDEX cal/CALORIES` | `set-cal c/1 cal/2400` |
+| [**Log calorie intake**](#logging-calorie-intake-log-cal) | `log-cal c/CLIENT_INDEX cal/CALORIES` | `log-cal c/1 cal/1500` |
 | [**Set workout focus**](#setting-a-workout-focus-set-focus) | `set-focus c/CLIENT_INDEX f/FOCUS` | `set-focus c/1 f/Chest` |
-| [**Remark**](#adding-a-remark-remark) | `remark INDEX r/REMARK` | `remark 1 r/Recovering from ACL surgery` |
+| [**Remark**](#adding-a-remark-remark) | `remark c/CLIENT_INDEX r/REMARK` | `remark c/1 r/Recovering from ACL surgery` |
 | [**Set validity**](#setting-a-membership-validity-set-validity) | `set-validity INDEX v/VALIDITY` | `set-validity 1 v/2028-09-09` |
 | [**Delete (typed)**](#deleting-a-person-delete) | `delete t/TRAINER_INDEX` or `delete c/CLIENT_INDEX` | `delete t/2`, `delete c/1` |
 | [**Delete client**](#deleting-a-client-delete-client) | `delete-client INDEX` | `delete-client 1` |

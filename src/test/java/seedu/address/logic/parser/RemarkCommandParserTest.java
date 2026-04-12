@@ -17,19 +17,20 @@ public class RemarkCommandParserTest {
     @Test
     public void parse_missingParts_throwsParseException() {
         assertParseFailure(parser, "", String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemarkCommand.MESSAGE_USAGE));
-        assertParseFailure(parser, "1", String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemarkCommand.MESSAGE_USAGE));
-        assertParseFailure(parser, "r/Some remark",
+        assertParseFailure(parser, " c/1",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemarkCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, " r/Some remark",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemarkCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_emptyRemark_throwsParseException() {
-        assertParseFailure(parser, "1 r/   ", Remark.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, " c/1 r/   ", Remark.MESSAGE_CONSTRAINTS);
     }
 
     @Test
     public void parse_validArgs_returnsCommand() {
         RemarkCommand expected = new RemarkCommand(TypicalIndexes.INDEX_FIRST_PERSON, new Remark("Needs follow-up"));
-        assertParseSuccess(parser, "1 r/Needs follow-up", expected);
+        assertParseSuccess(parser, " c/1 r/Needs follow-up", expected);
     }
 }

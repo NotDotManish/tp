@@ -3,6 +3,7 @@ package seedu.address.logic.parser;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CALORIE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_CLIENT;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.LogCalorieIntakeCommand;
@@ -21,19 +22,20 @@ public class LogCalorieIntakeCommandParser implements Parser<LogCalorieIntakeCom
      */
     public LogCalorieIntakeCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_CALORIE);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_CLIENT, PREFIX_CALORIE);
 
-        if (!argMultimap.getValue(PREFIX_CALORIE).isPresent()
-                || argMultimap.getPreamble().isEmpty()) {
+        if (!argMultimap.getValue(PREFIX_CLIENT).isPresent()
+                || !argMultimap.getValue(PREFIX_CALORIE).isPresent()
+                || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, LogCalorieIntakeCommand.MESSAGE_USAGE));
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_CALORIE);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_CLIENT, PREFIX_CALORIE);
 
         Index index;
         try {
-            index = ParserUtil.parseIndex(argMultimap.getPreamble());
+            index = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_CLIENT).get());
         } catch (ParseException pe) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, LogCalorieIntakeCommand.MESSAGE_USAGE), pe);

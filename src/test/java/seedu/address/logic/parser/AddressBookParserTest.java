@@ -114,7 +114,7 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_setCalorieTarget() throws Exception {
         SetCalorieTargetCommand command = (SetCalorieTargetCommand) parser.parseCommand(
-                SetCalorieTargetCommand.COMMAND_WORD + " "
+                SetCalorieTargetCommand.COMMAND_WORD + " c/"
                         + INDEX_FIRST_PERSON.getOneBased() + " cal/2000");
         assertEquals(new SetCalorieTargetCommand(INDEX_FIRST_PERSON, 2000), command);
     }
@@ -122,7 +122,7 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_logCalorieIntake() throws Exception {
         LogCalorieIntakeCommand command = (LogCalorieIntakeCommand) parser.parseCommand(
-                LogCalorieIntakeCommand.COMMAND_WORD + " "
+                LogCalorieIntakeCommand.COMMAND_WORD + " c/"
                         + INDEX_FIRST_PERSON.getOneBased() + " cal/500");
         assertEquals(new LogCalorieIntakeCommand(INDEX_FIRST_PERSON, 500), command);
     }
@@ -137,7 +137,7 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_remark() throws Exception {
         RemarkCommand command = (RemarkCommand) parser.parseCommand(
-                RemarkCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " r/Needs follow-up");
+                RemarkCommand.COMMAND_WORD + " c/" + INDEX_FIRST_PERSON.getOneBased() + " r/Needs follow-up");
         assertEquals(new RemarkCommand(INDEX_FIRST_PERSON, new Remark("Needs follow-up")), command);
     }
 

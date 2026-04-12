@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CALORIE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_CLIENT;
 
 import java.util.List;
 
@@ -20,15 +21,16 @@ import seedu.address.model.person.Person;
  */
 public class LogCalorieIntakeCommand extends Command {
 
-    public static final String COMMAND_WORD = "log-calorie";
+    public static final String COMMAND_WORD = "log-cal";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Logs calorie intake for the client identified by the index"
             + " number used in the displayed client list."
             + " The calories are added to the client's existing daily intake.\n"
-            + "Parameters: INDEX (must be a positive integer) "
+            + "Parameters: "
+            + PREFIX_CLIENT + "CLIENT_INDEX "
             + PREFIX_CALORIE + "CALORIES (must be a positive integer)\n"
-            + "Example: " + COMMAND_WORD + " 1 " + PREFIX_CALORIE + "500";
+            + "Example: " + COMMAND_WORD + " " + PREFIX_CLIENT + "1 " + PREFIX_CALORIE + "500";
 
     public static final String MESSAGE_LOG_CALORIE_SUCCESS =
             "Logged %2$d kcal for %1$s. Total intake: %3$d kcal";
